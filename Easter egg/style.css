@@ -1,0 +1,103 @@
+/* ================= EASTER EGG ================= */
+.egg{
+  position:fixed; left:calc(14px + env(safe-area-inset-left,0px)); bottom:calc(14px + env(safe-area-inset-bottom,0px));
+  width:38px; height:48px; padding:0; border:0; background:none; cursor:pointer;
+  opacity:.45; z-index:40; transition:opacity .3s, transform .3s;
+  -webkit-tap-highlight-color:transparent;
+}
+.egg:hover,.egg:focus-visible{opacity:1; transform:scale(1.12) rotate(-6deg)}
+.egg-half{position:absolute; inset:0; transition:transform .8s cubic-bezier(.2,.9,.3,1), opacity .8s}
+.egg-half svg{width:100%; height:100%; display:block; filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
+.egg-top{clip-path:polygon(0 0,100% 0,100% 52%,82% 44%,64% 56%,46% 44%,28% 56%,12% 46%,0 54%)}
+.egg-bottom{clip-path:polygon(0 54%,12% 46%,28% 56%,46% 44%,64% 56%,82% 44%,100% 52%,100% 100%,0 100%)}
+.egg-cracks{position:absolute; inset:0; width:100%; height:100%; pointer-events:none}
+.egg-cracks path{fill:none; stroke:#7a5a3a; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round;
+  stroke-dasharray:1; stroke-dashoffset:1; transition:stroke-dashoffset .4s ease}
+.egg.s1 .c1,.egg.s2 .c1,.egg.s3 .c1{stroke-dashoffset:0}
+.egg.s2 .c2,.egg.s3 .c2{stroke-dashoffset:0}
+.egg.s3 .c3{stroke-dashoffset:0}
+.egg-glow{position:absolute; left:50%; top:50%; width:10px; height:10px; margin:-5px; border-radius:50%;
+  background:radial-gradient(circle,#fff 0%,#ffe9a8 40%,transparent 70%); opacity:0; pointer-events:none}
+
+.egg.wiggle{animation:eggWiggle .5s}
+@keyframes eggWiggle{
+  0%,100%{transform:rotate(0)} 20%{transform:rotate(-16deg)} 40%{transform:rotate(14deg)}
+  60%{transform:rotate(-10deg)} 80%{transform:rotate(8deg)}
+}
+.egg.s3:not(.open){animation:eggShake .12s infinite}
+@keyframes eggShake{0%,100%{transform:translateX(-2px) rotate(-4deg)} 50%{transform:translateX(2px) rotate(4deg)}}
+.egg.open{opacity:1; animation:none}
+.egg.open .egg-top{transform:translate(-10px,-30px) rotate(-26deg); opacity:0}
+.egg.open .egg-bottom{transform:translate(8px,10px) rotate(14deg); opacity:0}
+.egg.open .egg-cracks{opacity:0}
+.egg.open .egg-glow{animation:eggBurst 1s ease-out forwards}
+@keyframes eggBurst{0%{opacity:1; transform:scale(1)} 100%{opacity:0; transform:scale(40)}}
+
+/* ---------- overlay ---------- */
+.egg-overlay{
+  position:fixed; inset:0; z-index:200; overflow:hidden; color:#fff7e0;
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  background:radial-gradient(120% 90% at 50% 20%, #3b2f7a 0%, #1c1648 55%, #0b0824 100%);
+  opacity:0; visibility:hidden; transition:opacity 1s ease, visibility 1s;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0);
+}
+html[data-theme="day"] .egg-overlay{
+  background:radial-gradient(120% 90% at 50% 20%, #ffb86b 0%, #e88a8a 50%, #7a5aa8 100%);
+}
+.egg-overlay.show{opacity:1; visibility:visible}
+.egg-overlay[hidden]{display:none}
+
+.egg-sky{position:absolute; inset:0; cursor:pointer}
+.egg-star{position:absolute; width:var(--s); height:var(--s); border-radius:50%; background:#fff;
+  box-shadow:0 0 6px 1px rgba(255,240,180,.8); animation:eggTwinkle var(--d) ease-in-out infinite; animation-delay:var(--l)}
+@keyframes eggTwinkle{0%,100%{opacity:.15; transform:scale(.6)} 50%{opacity:1; transform:scale(1.2)}}
+.egg-shoot{position:absolute; width:90px; height:2px; border-radius:2px;
+  background:linear-gradient(90deg,transparent,#fff); transform:rotate(-30deg); opacity:0;
+  animation:eggShoot 1.4s ease-out forwards}
+@keyframes eggShoot{0%{opacity:1; translate:0 0} 100%{opacity:0; translate:-260px 150px}}
+.egg-spark{position:absolute; pointer-events:none; font-size:18px; animation:eggSpark .9s ease-out forwards}
+@keyframes eggSpark{0%{opacity:1; transform:translate(-50%,-50%) scale(.4)} 100%{opacity:0; transform:translate(-50%,-140%) scale(1.4) rotate(40deg)}}
+
+.egg-moon{position:absolute; top:6%; right:9%; width:90px; height:90px; transform-origin:50% -60px;
+  animation:eggSwing 5s ease-in-out infinite; pointer-events:none}
+.egg-moon span{display:block; width:100%; height:100%; border-radius:50%;
+  background:#fff3c4; box-shadow:0 0 40px 10px rgba(255,236,160,.55), inset -18px -6px 0 0 #f0d98a}
+@keyframes eggSwing{0%,100%{transform:rotate(-8deg)} 50%{transform:rotate(8deg)}}
+
+.egg-close{position:absolute; top:calc(14px + env(safe-area-inset-top,0px)); left:14px; z-index:3;
+  width:42px; height:42px; border-radius:50%; border:0; cursor:pointer; font-size:18px;
+  color:#fff7e0; background:rgba(255,255,255,.15); backdrop-filter:blur(6px)}
+.egg-close:hover{background:rgba(255,255,255,.3)}
+
+.egg-scene{position:relative; z-index:2; padding:20px; max-width:520px; pointer-events:none}
+.egg-pip{position:relative; width:min(46vw,230px); margin:0 auto; animation:eggFloat 4.5s ease-in-out infinite}
+.egg-pip img{width:100%; display:block; filter:drop-shadow(0 12px 24px rgba(0,0,0,.4));
+  animation:eggBreathe 3.2s ease-in-out infinite; transform-origin:50% 90%}
+.egg-pip-day{display:none!important}
+html[data-theme="day"] .egg-pip-day{display:block!important}
+html[data-theme="day"] .egg-pip-night{display:none!important}
+@keyframes eggFloat{0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)}}
+@keyframes eggBreathe{0%,100%{transform:scale(1)} 50%{transform:scale(1.03,.98)}}
+
+.egg-z{position:absolute; top:12%; right:6%; font-family:'Fredoka',sans-serif; font-weight:700; color:#fff3c4; opacity:0;
+  animation:eggZ 3.6s ease-in infinite}
+.egg-z.z2{animation-delay:1.2s; font-size:1.4em}
+.egg-z.z3{animation-delay:2.4s; font-size:1.8em}
+@keyframes eggZ{0%{opacity:0; transform:translate(0,0) scale(.6)} 20%{opacity:1} 100%{opacity:0; transform:translate(40px,-80px) scale(1.3)}}
+
+.egg-title{font-family:'Fredoka',sans-serif; font-size:clamp(1.2rem,4.5vw,1.7rem); margin:18px 0 10px; letter-spacing:.04em}
+.egg-lyrics{min-height:130px}
+.egg-lyrics p{margin:6px 0; font-family:'Nunito',sans-serif; font-size:clamp(1rem,3.6vw,1.2rem); opacity:0; transform:translateY(8px)}
+.egg-overlay.show .egg-lyrics p{animation:eggLine 1.6s ease forwards}
+.egg-overlay.show .egg-lyrics p:nth-child(1){animation-delay:1.2s}
+.egg-overlay.show .egg-lyrics p:nth-child(2){animation-delay:5s}
+.egg-overlay.show .egg-lyrics p:nth-child(3){animation-delay:8.8s}
+.egg-overlay.show .egg-lyrics p:nth-child(4){animation-delay:12.6s}
+.egg-overlay.show .egg-lyrics p.egg-last{animation-delay:16.5s; font-family:'Fredoka',sans-serif; font-size:1.4rem}
+@keyframes eggLine{to{opacity:1; transform:none}}
+.egg-hint{font-size:.8rem; opacity:.6; margin-top:10px}
+
+@media (prefers-reduced-motion:reduce){
+  .egg-pip,.egg-pip img,.egg-moon,.egg-star,.egg-z{animation:none}
+  .egg-z{display:none}
+}

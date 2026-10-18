@@ -1,0 +1,50 @@
+<!-- ===== EASTER EGG ===== -->
+<button class="egg" id="secretEgg" aria-label="A mysterious little egg. Tap it three times.">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <radialGradient id="eggFill" cx="35%" cy="28%" r="80%">
+        <stop offset="0" stop-color="#fffdf5"/>
+        <stop offset="1" stop-color="#f1e2c6"/>
+      </radialGradient>
+    </defs>
+  </svg>
+  <span class="egg-glow"></span>
+  <span class="egg-half egg-top">
+    <svg viewBox="0 0 60 76"><path d="M30 2C46 2 57 28 57 46C57 62 45 74 30 74C15 74 3 62 3 46C3 28 14 2 30 2Z" fill="url(#eggFill)" stroke="#d9c39a" stroke-width="1.5"/>
+      <circle cx="20" cy="30" r="2.4" fill="#c9b6f0"/><circle cx="40" cy="22" r="2" fill="#f6b8cf"/><circle cx="34" cy="38" r="1.8" fill="#c9b6f0"/>
+    </svg>
+  </span>
+  <span class="egg-half egg-bottom">
+    <svg viewBox="0 0 60 76"><path d="M30 2C46 2 57 28 57 46C57 62 45 74 30 74C15 74 3 62 3 46C3 28 14 2 30 2Z" fill="url(#eggFill)" stroke="#d9c39a" stroke-width="1.5"/>
+      <circle cx="18" cy="56" r="2.2" fill="#f6b8cf"/><circle cx="42" cy="52" r="2.6" fill="#c9b6f0"/><circle cx="30" cy="66" r="1.8" fill="#c9b6f0"/>
+    </svg>
+  </span>
+  <svg class="egg-cracks" viewBox="0 0 60 76" aria-hidden="true">
+    <path class="c1" pathLength="1" d="M30 6 L26 18 L33 27 L27 38"/>
+    <path class="c2" pathLength="1" d="M27 38 L36 44 L29 52 L38 58"/>
+    <path class="c3" pathLength="1" d="M29 52 L22 60 L28 70 M33 27 L42 30"/>
+  </svg>
+</button>
+
+<div class="egg-overlay" id="eggOverlay" role="dialog" aria-modal="true" aria-label="Pip's secret lullaby" hidden>
+  <div class="egg-sky" id="eggSky"></div>
+  <div class="egg-moon" aria-hidden="true"><span></span></div>
+  <button class="egg-close" id="eggClose" aria-label="Close the secret lullaby">✕</button>
+
+  <div class="egg-scene">
+    <div class="egg-pip">
+      <img class="egg-pip-night" src="pip_night.png" alt="Pip dozing on a cloud" />
+      <img class="egg-pip-day" src="pip_day.png" alt="Pip dozing on a cloud" />
+      <span class="egg-z z1">z</span><span class="egg-z z2">Z</span><span class="egg-z z3">z</span>
+    </div>
+    <p class="egg-title">✦ Pip's Secret Lullaby ✦</p>
+    <div class="egg-lyrics" aria-live="polite">
+      <p>Hush now, little skull, the stars are out,</p>
+      <p>The moon is humming all about,</p>
+      <p>Close your eyes, the clouds are deep,</p>
+      <p>Pip will code you into sleep…</p>
+      <p class="egg-last">Sweet dreams 🌙</p>
+    </div>
+    <p class="egg-hint">tap the sky for stardust ✨</p>
+  </div>
+</div>
