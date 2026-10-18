@@ -1,0 +1,123 @@
+/* ===========================================================
+   The Lullaby Lab — scoped styles (everything lives under .lullaby-lab)
+   Uses the site's theme tokens (--card, --text, --accent …) with fallbacks.
+   =========================================================== */
+
+.lullaby-lab,
+.lullaby-lab * { box-sizing: border-box; }
+
+.lullaby-lab {
+  position: relative;
+  width: min(980px, 100%);
+  margin: 0 auto;
+  padding: clamp(16px, 3.2vw, 30px);
+  border-radius: 28px;
+  color: var(--text, #efe9ff);
+  font-family: var(--font-body, "Nunito", system-ui, sans-serif);
+  background: var(--card, rgba(38, 28, 92, .55));
+  border: 1px solid var(--card-border, rgba(185, 164, 255, .28));
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 24px 60px -28px var(--glow, rgba(255, 200, 92, .35));
+}
+
+/* ---------- header ---------- */
+.ll-head { display: flex; align-items: center; gap: clamp(12px, 3vw, 24px); margin-bottom: 18px; }
+.ll-pip { flex: none; width: clamp(80px, 14vw, 124px); transform-origin: 50% 90%; }
+.ll-pip-img { display: block; width: 100%; height: auto; filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .35)); }
+.ll-pip-day { display: none; }
+html[data-theme="day"] .ll-pip-day { display: block; }
+html[data-theme="day"] .ll-pip-night { display: none; }
+
+.ll-eyebrow { font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted, #b9afe6); }
+.ll-head h2 { font-family: var(--font-head, "Fredoka", system-ui, sans-serif); font-size: clamp(1.7rem, 4.5vw, 2.5rem); line-height: 1.1; margin: 2px 0 6px; }
+.ll-sub { color: var(--muted, #b9afe6); line-height: 1.45; max-width: 52ch; }
+
+/* ---------- now playing ---------- */
+.ll-now { margin-bottom: 14px; }
+.ll-seed {
+  display: inline-block; font-size: .78rem; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+  background: rgba(255, 255, 255, .1); border: 1px solid var(--card-border, rgba(185, 164, 255, .28)); color: var(--muted, #b9afe6);
+}
+.ll-song { display: block; margin-top: 6px; font-family: var(--font-head, "Fredoka", system-ui, sans-serif); font-size: clamp(1.15rem, 3.4vw, 1.6rem); color: var(--accent, #ffc85c); }
+html[data-theme="day"] .ll-song { color: var(--accent, #c2410c); }
+.ll-pipnote { margin-top: 2px; min-height: 1.4em; font-style: italic; color: var(--muted, #b9afe6); }
+
+/* ---------- pin cylinder ---------- */
+.ll-roll-wrap {
+  position: relative; overflow: hidden; border-radius: 20px;
+  background: linear-gradient(180deg, #1b1245, #261a63 50%, #1b1245);
+  border: 1px solid var(--card-border, rgba(185, 164, 255, .28));
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, .35);
+}
+html[data-theme="day"] .ll-roll-wrap { background: linear-gradient(180deg, #4a2a14, #6b4023 50%, #4a2a14); }
+.ll-roll-wrap::after { /* cylinder shading */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(0, 0, 0, .35), transparent 28%, transparent 72%, rgba(0, 0, 0, .35));
+}
+.ll-roll { display: block; width: 100%; height: clamp(150px, 26vw, 210px); }
+
+.ll-bars { display: flex; justify-content: center; gap: 10px; margin: 12px 0 4px; }
+.ll-bars span {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--card-border, rgba(185, 164, 255, .28)); transition: transform .3s, background .3s, box-shadow .3s;
+}
+.ll-bars span.on { background: var(--accent, #ffc85c); transform: scale(1.45); box-shadow: 0 0 10px var(--glow, rgba(255, 200, 92, .5)); }
+
+/* ---------- controls ---------- */
+.ll-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: 14px; }
+
+.ll-btn {
+  display: inline-flex; align-items: center; gap: .5rem; cursor: pointer; border: 0; border-radius: 999px;
+  padding: .75rem 1.3rem; font: 600 1rem var(--font-head, "Fredoka", system-ui, sans-serif);
+  background: var(--btn-bg, linear-gradient(135deg, #ffd47a, #ffb347)); color: var(--btn-text, #2a1a4f);
+  box-shadow: 0 8px 20px -8px var(--glow, rgba(255, 200, 92, .5));
+  transition: transform .3s cubic-bezier(.34, 1.56, .64, 1), box-shadow .3s;
+}
+.ll-btn:hover { transform: translateY(-2px) scale(1.04); }
+.ll-btn:active { transform: scale(.97); }
+.ll-btn:focus-visible, .ll-key:focus-visible, .ll-field select:focus-visible, .ll-field input:focus-visible, .ll-check input:focus-visible {
+  outline: 3px solid var(--accent-2, #b9a4ff); outline-offset: 3px;
+}
+.ll-ghost { background: transparent; color: var(--text, #efe9ff); border: 2px solid var(--card-border, rgba(185, 164, 255, .28)); box-shadow: none; }
+.ll-play { min-width: 8.5rem; justify-content: center; }
+
+.ll-field { display: flex; align-items: center; gap: .55rem; font-size: .92rem; font-weight: 600; color: var(--muted, #b9afe6); }
+.ll-field input[type="range"] { width: clamp(100px, 16vw, 160px); accent-color: var(--accent, #ffc85c); }
+.ll-field output { min-width: 2ch; font-variant-numeric: tabular-nums; color: var(--text, #efe9ff); }
+.ll-field select {
+  font: inherit; color: var(--text, #efe9ff); padding: .4rem .7rem; border-radius: 12px; cursor: pointer;
+  background: rgba(255, 255, 255, .1); border: 1px solid var(--card-border, rgba(185, 164, 255, .28));
+}
+.ll-field select option { color: #2a1a4f; background: #fff; }
+.ll-check { display: flex; align-items: center; gap: .5rem; font-size: .92rem; font-weight: 600; color: var(--muted, #b9afe6); cursor: pointer; }
+.ll-check input { width: 1.1rem; height: 1.1rem; accent-color: var(--accent, #ffc85c); }
+.ll-check small { font-weight: 400; opacity: .8; }
+
+/* ---------- play-along keys ---------- */
+.ll-play-along { margin-top: 18px; }
+.ll-play-along p { font-size: .9rem; font-weight: 600; color: var(--muted, #b9afe6); margin-bottom: 8px; }
+.ll-keys { display: flex; flex-wrap: wrap; gap: 8px; }
+.ll-key {
+  width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 1.15rem; line-height: 1;
+  color: var(--accent, #ffc85c); background: rgba(255, 255, 255, .08); border: 1px solid var(--card-border, rgba(185, 164, 255, .28));
+  transition: transform .2s cubic-bezier(.34, 1.56, .64, 1), box-shadow .2s, background .2s; touch-action: manipulation;
+}
+html[data-theme="day"] .ll-key { color: var(--accent, #c2410c); }
+.ll-key:hover { transform: translateY(-2px); }
+.ll-key.hit { transform: scale(1.18); background: var(--glow, rgba(255, 200, 92, .35)); box-shadow: 0 0 16px var(--glow, rgba(255, 200, 92, .5)); }
+
+/* ---------- Pip sways while the music plays ---------- */
+@keyframes llSway { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg) translateY(-3px); } }
+.lullaby-lab.is-playing .ll-pip { animation: llSway 3.2s ease-in-out infinite; }
+
+@media (max-width: 560px) {
+  .ll-head { flex-direction: column; text-align: center; }
+  .ll-controls { justify-content: center; }
+  .ll-keys { justify-content: center; }
+  .ll-play-along { text-align: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lullaby-lab.is-playing .ll-pip { animation: none; }
+  .ll-btn, .ll-key, .ll-bars span { transition: none; }
+}
