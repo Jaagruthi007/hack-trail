@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="night">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Pip the Dream Developer ✦ Baby's First Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- Background skies (cross-fade between night and day) -->
+  <div class="sky sky-night" aria-hidden="true"></div>
+  <div class="sky sky-day" aria-hidden="true"></div>
+  <div class="celestial" aria-hidden="true"><span class="orb"></span></div>
+  <div class="stars" id="stars" aria-hidden="true"></div>
+  <canvas id="shower" aria-hidden="true"></canvas>
+
+  <!-- ================= PAGE 1 : INTRODUCTION ================= -->
+  <main class="page page-intro active" id="page1">
+    <header class="topbar">
+      <div class="brand">☁️ <span>Pip's Nursery</span></div>
+      <div class="top-actions">
+        <button class="icon-btn" id="musicBtn" aria-pressed="true" aria-label="Mute music" title="Music on / off">
+          <span class="ico-on">🎵</span><span class="ico-off">🔇</span>
+        </button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <!-- Character stage -->
+      <div class="stage">cdewx
+        <div class="bubble" id="bubble" aria-live="polite"><span id="bubbleText">Hi! I'm Pip! 👋</span></div>
+
+        <div class="pip-wrap" id="pipWrap">
+          <div class="halo" aria-hidden="true"></div>
+          <div class="pip3d" id="pip3d">
+            <div class="pip-body" id="pipBody">
+              <img class="pip-img pip-night" src="pip_night.png"
+                alt="Pip, a cute skull baby in a starry nightcap and indigo pyjamas, waving from a cloud" />
+              <img class="pip-img pip-day" src="pip_day.png"
+                alt="Pip in a sunny marigold outfit, waving from a cloud" />
+              <span class="eye eye-l" aria-hidden="true"></span>
+              <span class="eye eye-r" aria-hidden="true"></span>
+              <span class="wave-emoji" aria-hidden="true">👋</span>
+            </div>
+            <div class="particles" id="particles" aria-hidden="true"></div>
+          </div>
+          <div class="ground-shadow" aria-hidden="true"></div>
+        </div>
+
+        <div class="stage-actions">
+          <button class="btn btn-theme" id="themeBtn" aria-label="Switch between night and day">
+            <span class="theme-ico">☀️</span><span class="theme-label">Wake up the day</span>
+          </button>
+          <button class="btn btn-ghost" id="replayBtn" aria-label="Hear Pip's story again">🗣️ Hear Pip again</button>
+        </div>
+      </div>
+
+      <!-- Text -->
+      <div class="copy">
+        <p class="eyebrow">Hello, I'm</p>
+        <h1 class="name">Pip</h1>
+        <p class="role">the skull baby · junior dream engineer</p>
+
+        <div class="cards">
+          <article class="card">
+            <h2><span>🌙</span> What I am</h2>
+            <p>A sleepy, gentle skull baby with glowing amber eyes, a crooked little smile and a very fancy nightcap.
+            </p>
+          </article>
+          <article class="card">
+            <h2><span>💻</span> What I do</h2>
+            <p>I code dreams, lullabies, nightlights &amp; tiny websites at the Midnight Nursery.</p>
+            <a href="nightlight.html" class="btn btn-ghost"
+              style="margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; font-size: 0.9rem; padding: 6px 14px; border-radius: 14px; text-decoration: none; border: 1px solid var(--card-border);">✨
+              Nightlight Collection 🌙</a>
+          </article>
+          <article class="card card-story">
+            <h2><span>📖</span> My story</h2>
+            <div class="story" id="story" aria-live="polite"></div>
+            <button class="btn btn-main story-launch-btn" id="openStorybookHeroBtn" type="button"
+              style="margin-top: 12px; width: 100%;">
+              ✨ Open Bedtime Storybook 📖
+            </button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <footer class="bottom">
+      <button class="btn btn-next" id="nextBtn">Next <span aria-hidden="true">➜</span></button>
+    </footer>
+  </main>
+
+  <!-- ================= PAGE 2 : MENU + STAR SHOWER ================= -->
+  <main class="page page-menu" id="page2" aria-hidden="true">
+    <header class="topbar">
+      <div class="brand">☁️ <span>Pip's Nursery</span></div>
+      <div class="top-actions">
+        <button class="icon-btn" id="menuBtn" aria-expanded="false" aria-controls="menuPanel" aria-label="Open menu">
+          <span class="burger"><i></i><i></i><i></i></span>
+        </button>
+      </div>
+    </header>
+
+    <nav class="menu-panel" id="menuPanel" aria-label="Main menu">
+      <button class="menu-link" data-go="home">🏠 Home <small>back to Pip</small></button>
+      <a class="menu-link" href="nightlight.html" style="text-decoration: none;">✨ Nightlights <small>pick tonight's
+          glow</small></a>
+      <button class="menu-link" data-soon="About Pip">🌙 About Pip</button>
+      <button class="menu-link" data-soon="Projects">🛠️ Projects</button>
+      <button class="menu-link" data-go="storybook" id="menuStoryBtn">📖 Bedtime Storybook <small>Pip &amp;
+          Twinkle</small></button>
+      <button class="menu-link" data-soon="Guestbook">💌 Guestbook</button>
+      <div class="menu-theme">
+        <span>Theme</span>
+        <div class="seg" role="group" aria-label="Theme">
+          <button class="seg-btn" data-theme-set="night" aria-pressed="true">🌙 Night</button>
+          <button class="seg-btn" data-theme-set="day" aria-pressed="false">☀️ Day</button>
+        </div>
+      </div>
+    </nav>
+
+    <section class="menu-hero">
+      <img class="mini-pip mini-night" src="pip_night.png" alt="" />
+      <img class="mini-pip mini-day" src="pip_day.png" alt="" />
+      <h2>Welcome to the Nursery</h2>
+      <p>More little surprises are coming soon ✨</p>
+    </section>
+  </main>
+
+  <!-- ================= PAGE 3 : BEDTIME STORYBOOK ================= -->
+  <main class="page page-storybook" id="pageStorybook" aria-hidden="true">
+    <header class="topbar storybook-topbar">
+      <div class="brand storybook-brand">
+        <button class="btn btn-ghost btn-back" id="storybookBackBtn" type="button" aria-label="Back to nursery">
+          <span aria-hidden="true">←</span> Nursery
+        </button>
+        <span class="storybook-badge">🌙 Bedtime Storybook</span>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" id="storybookThemeBtn" type="button" aria-label="Switch to day mode"
+          title="Wake up the day">
+          <span class="ico-theme">☀️</span>
+        </button>
+      </div>
+    </header>
+
+    <section class="storybook-section">
+      <div class="storybook-hero-header">
+        <span class="storybook-chip">✦ Feature 5 · Bedtime Storybook ✦</span>
+        <h1 class="storybook-book-title">Pip and the Little Star That Forgot to Shine</h1>
+        <p class="storybook-book-subtitle">An original, dreamy bedtime tale in 7 sweet pages</p>
+      </div>
+
+      <!-- Storybook Progress & Dots -->
+      <div class="storybook-progress-card">
+        <div class="storybook-progress-info">
+          <span class="progress-label" id="progressLabel">Story Journey</span>
+          <span class="progress-percent" id="progressPercent">Page 1 of 7 (14%)</span>
+        </div>
+        <div class="progress-track" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="7"
+          id="progressBarTrack">
+          <div class="progress-fill" id="storybookProgressBar" style="width: 14.28%;"></div>
+        </div>
+        <div class="storybook-dots" id="storybookDots" role="tablist" aria-label="Storybook pages"></div>
+      </div>
+
+      <!-- Main Book Spread Container -->
+      <div class="storybook-card" id="storybookCard">
+        <!-- Visual Scene Side -->
+        <div class="storybook-scene-panel">
+          <div class="scene-frame">
+            <div class="scene-cloud-tag" id="sceneCloudTag">Page 1 · The Midnight Nursery</div>
+            <div class="scene-viewport" id="sceneViewport" role="img" aria-label="Visual scene illustration"></div>
+            <div class="scene-stars-glow" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <!-- Story Text & Audio Controls Side -->
+        <div class="storybook-content-panel">
+          <div class="content-meta-bar">
+            <span class="badge-chapter" id="badgeChapter">Chapter 1</span>
+            <span class="badge-mood" id="badgeMood">🌙 Quiet &amp; Dreamy</span>
+          </div>
+
+          <h2 class="story-chapter-title" id="storyChapterTitle">The Midnight Nursery</h2>
+
+          <div class="story-paragraph-box" id="storyParagraphBox" aria-live="polite"></div>
+
+          <!-- Narration Control Bar -->
+          <div class="narration-toolbar" role="region" aria-label="Speech and Read Aloud Controls">
+            <div class="narration-status-line">
+              <span class="narrator-icon" id="narratorIcon">🎙️</span>
+              <span class="narrator-text" id="narratorStatus">Pip's Storyteller ready to read</span>
+            </div>
+            <div class="narration-btn-group">
+              <button class="btn btn-audio btn-read-aloud" id="readAloudBtn" type="button"
+                aria-label="Read aloud current page">
+                <span class="btn-ico">🔊</span> <span class="btn-text">Read Aloud</span>
+              </button>
+              <button class="btn btn-audio btn-pause" id="pauseNarrationBtn" type="button" aria-label="Pause narration"
+                disabled>
+                <span class="btn-ico">⏸️</span> <span class="btn-text">Pause</span>
+              </button>
+              <button class="btn btn-audio btn-stop" id="stopNarrationBtn" type="button" aria-label="Stop narration"
+                disabled>
+                <span class="btn-ico">⏹️</span> <span class="btn-text">Stop</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Page Navigation Buttons -->
+          <footer class="storybook-nav-footer">
+            <button class="btn btn-page-nav btn-page-prev" id="prevPageBtn" type="button" aria-label="Previous page"
+              disabled>
+              <span aria-hidden="true">‹</span> Previous
+            </button>
+            <div class="storybook-page-counter" id="storybookPageCounter">
+              <span class="curr-page" id="currPageNum">1</span>
+              <span class="divider">/</span>
+              <span class="total-pages">7</span>
+            </div>
+            <button class="btn btn-page-nav btn-page-next" id="nextPageBtn" type="button" aria-label="Next page">
+              Next <span aria-hidden="true">›</span>
+            </button>
+          </footer>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
