@@ -1,19 +1,8 @@
 const $ = id => document.getElementById(id);
-const cv = $('c'), ctx = cv.getContext('2d');
 const rnd = n => Math.random() * n | 0;
 const pick = a => a[rnd(a.length)];
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-let W, H, dpr;
-
-function resize() {
-  dpr = window.devicePixelRatio || 1;
-  W = cv.clientWidth; H = cv.clientHeight;
-  cv.width = W * dpr; cv.height = H * dpr;
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-}
-addEventListener('resize', resize);
-resize();
 
 // ---- Music settings ----
 const STEPS = 16, ROWS = 8;
@@ -66,7 +55,7 @@ function tine(f, when, vel) {
   });
 }
 
-// Pip's voice: a gentle "oo/ah" hum made from a buzzing tone shaped by two vowel filters
+// Pip's voice: a gentle "oo/ah" hum, a buzzing tone shaped by two vowel filters
 function hum(f, when, dur) {
   const o = ac.createOscillator(); o.type = 'sawtooth'; o.frequency.value = f;
   const lfo = ac.createOscillator(), lg = ac.createGain();
@@ -120,9 +109,9 @@ function compose() {
 
   bar(0, rA, s);
   bar(1, rA, s + pick([-1, 0, 1]));
-  bar(2, rB, s + pick([1, 2, 3]));              // a little higher, a little tension
+  bar(2, rB, s + pick([1, 2, 3]));                    // a little higher, a little tension
   const end = bar(3, pick([[1, 0, 1, 0], [1, 0, 0, 0]]), s - pick([0, 1]));
-  g[end.r][end.step] = false; g[0][end.step] = true; // come home to the tonic
+  g[end.r][end.step] = false; g[0][end.step] = true;  // come home to the tonic
 
   // A soft bass note on the first beats
   if (Math.random() < .8) g[0][0] = true;
@@ -133,16 +122,15 @@ function compose() {
   $('song').textContent = pick(ADJ) + ' ' + pick(NOUN) + ' · No. ' + songNo;
 }
 
-// ---- Scheduler ----
+// ---- Scheduler: plays the pattern on the audio clock ----
 let playing = false, started = false, timer = null;
-let absStep = 0, nextT = 0, steps = [], events = [], pos = 0;
+let absStep = 0, nextT = 0, events = [];
 
 function anyOn(st) { for (let r = 0; r < ROWS; r++) if (pat[r][st]) return true; return false; }
 
 function scheduler() {
   while (nextT < ac.currentTime + .3) {
     const st = absStep % STEPS, sd = stepDur();
-    steps.push({ t: nextT, abs: absStep, sd });
     const rows = [];
     for (let r = 0; r < ROWS; r++) {
       if (pat[r][st]) { tine(freq(r), nextT, .6 + Math.random() * .15); rows.push(r); }
@@ -181,6 +169,7 @@ function begin() {
   initAudio();
   compose();
   $('panel').classList.add('hide');
+  windKey();
   play();
 }
 
@@ -190,9 +179,9 @@ $('play').onclick = () => { if (!ac) begin(); else playing ? pause() : play(); }
 $('new').onclick = () => {
   initAudio(); compose();
   $('panel').classList.add('hide');
+  windKey();
   if (!playing) play();
 };
-$('clear').onclick = () => { pat = blank(); $('song').textContent = 'Your own lullaby'; };
 $('hum').onchange = e => { humOn = e.target.checked; };
 $('bpm').oninput = e => { bpm = +e.target.value; $('bpmv').textContent = bpm; };
 
@@ -204,253 +193,99 @@ document.querySelectorAll('.moods button').forEach(b => {
   };
 });
 
+// Tapping the golden key winds the box, and pauses or restarts the music
+$('key').onclick = () => { if (!ac) begin(); else { windKey(); playing ? pause() : play(); } };
+
 addEventListener('keydown', e => {
   if (e.code === 'Space' && e.target === document.body) { e.preventDefault(); $('play').click(); }
 });
 document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
 
-// ---- Layout of the music box ----
-let L = {};
-function layout() {
-  const rollH = clamp(H * .44, 190, 330), pad = 14;
-  L = {
-    rollH, pad, y0: H - rollH - 10,
-    rowH: (rollH - pad * 2) / ROWS,
-    combX: clamp(W * .2, 92, 170),
-    colW: clamp(W * .055, 34, 58)
-  };
+// ---- Floating notes and sparkles ----
+const fx = $('fx'), fctx = fx.getContext('2d'), stage = $('stage');
+let dpr = 1, particles = [];
+function sizeFx() {
+  dpr = window.devicePixelRatio || 1;
+  fx.width = stage.clientWidth * dpr; fx.height = stage.clientHeight * dpr;
+  fctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
-const rowY = r => L.y0 + L.pad + (ROWS - 1 - r + .5) * L.rowH;
-const hue = r => 38 + r * 13;
+addEventListener('resize', sizeFx);
+sizeFx();
 
-// Click or tap the roll to add or remove a pin
-cv.addEventListener('pointerdown', e => {
-  const rc = cv.getBoundingClientRect(), x = e.clientX - rc.left, y = e.clientY - rc.top;
-  if (x < L.combX + 6 || y < L.y0 + L.pad || y > L.y0 + L.rollH - L.pad) return;
-  const r = ROWS - 1 - Math.floor((y - L.y0 - L.pad) / L.rowH);
-  const k = Math.round((x - L.combX) / L.colW + pos);
-  const st = ((k % STEPS) + STEPS) % STEPS;
-  if (r < 0 || r >= ROWS) return;
-  pat[r][st] = !pat[r][st];
-  if (pat[r][st] && ac) tine(freq(r), ac.currentTime, .7);
-  $('song').textContent = 'Your own lullaby';
-});
-
-// ---- Scene state ----
-let t = 0, last = performance.now();
-let bounce = 0, glow = 0, sway = 0, singUntil = 0;
-const rowGlow = Array(ROWS).fill(0);
-let notes = [];
-const stars = Array.from({ length: 80 }, () => ({ x: Math.random(), y: Math.random() * .75, r: Math.random() * 1.3 + .3, p: Math.random() * 6 }));
-
-function rr(x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
-  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r);
-  ctx.closePath();
-}
-
-function burst(r) {
-  if (calm || notes.length > 90) return;
-  notes.push({
-    x: L.combX, y: rowY(r), vx: 14 + Math.random() * 34, vy: -(26 + Math.random() * 40),
-    l: 1.7, h: hue(r), g: pick(['♪', '✦', '♫'])
-  });
-}
-
-// ---- Drawing ----
-function drawSky() {
-  const sky = ctx.createLinearGradient(0, 0, 0, H);
-  sky.addColorStop(0, '#090a26'); sky.addColorStop(.6, '#1d1b4f'); sky.addColorStop(1, '#4a3470');
-  ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
-
-  for (const s of stars) {
-    const tw = calm ? .5 : .5 + .3 * Math.sin(t * 1.3 + s.p);
-    ctx.fillStyle = 'rgba(255,255,255,' + (.25 + .5 * tw * (.7 + glow * .3)) + ')';
-    ctx.beginPath(); ctx.arc(s.x * W, s.y * L.y0, s.r, 0, 7); ctx.fill();
+const COLORS = ['#f08aa8', '#e0a030', '#a58bf0', '#6cc7ae'];
+function burst(count) {
+  if (calm || particles.length > 80) return;
+  const s = stage.getBoundingClientRect(), r = $('boxImg').getBoundingClientRect();
+  const ox = r.left - s.left + r.width * .5, oy = r.top - s.top + r.height * .27;
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: ox + (Math.random() - .5) * r.width * .18, y: oy,
+      vx: (Math.random() - .5) * 46, vy: -(34 + Math.random() * 40),
+      l: 2.2, size: 18 + Math.random() * 12, c: pick(COLORS),
+      g: pick(['♪', '♫', '✦', '✧']), ph: Math.random() * 6
+    });
   }
-
-  // Crescent moon
-  const mxp = W * .86, myp = 84, mr = 22;
-  const mg = ctx.createRadialGradient(mxp, myp, 0, mxp, myp, mr * 3);
-  mg.addColorStop(0, 'rgba(255,240,200,.28)'); mg.addColorStop(1, 'rgba(255,240,200,0)');
-  ctx.fillStyle = mg; ctx.fillRect(mxp - mr * 3, myp - mr * 3, mr * 6, mr * 6);
-  ctx.save();
-  ctx.beginPath(); ctx.arc(mxp, myp, mr, 0, 7); ctx.clip();
-  ctx.beginPath(); ctx.arc(mxp, myp, mr, 0, 7); ctx.arc(mxp + mr * .5, myp - mr * .25, mr * .92, 0, 7);
-  ctx.fillStyle = '#fff0c9'; ctx.fill('evenodd');
-  ctx.restore();
 }
 
-function drawPip(cx, by, s) {
-  const open = !playing && (t % 4.3) > .14;
-  const m = humOn && playing && ac && ac.currentTime < singUntil ? .5 + .5 * Math.sin(t * 9) : 0;
-  const sq = bounce * .05;
-
-  // warm glow behind Pip
-  const wg = ctx.createRadialGradient(cx, by - 60 * s, 10, cx, by - 60 * s, 150 * s);
-  wg.addColorStop(0, 'rgba(255,190,110,' + (.16 + glow * .14) + ')'); wg.addColorStop(1, 'rgba(255,190,110,0)');
-  ctx.fillStyle = wg; ctx.fillRect(cx - 160 * s, by - 210 * s, 320 * s, 300 * s);
-
-  ctx.save();
-  ctx.translate(cx, by); ctx.rotate(sway); ctx.scale(s * (1 + sq), s * (1 - sq));
-
-  // antenna with a glowing tip that pulses with each note
-  ctx.strokeStyle = '#d9a864'; ctx.lineWidth = 3; ctx.lineCap = 'round';
-  ctx.beginPath(); ctx.moveTo(0, -100); ctx.quadraticCurveTo(-8, -126, 14, -146); ctx.stroke();
-  const gr = 10 + glow * 16;
-  const ag = ctx.createRadialGradient(14, -148, 0, 14, -148, gr);
-  ag.addColorStop(0, 'rgba(255,248,214,1)'); ag.addColorStop(.4, 'rgba(255,214,120,.7)'); ag.addColorStop(1, 'rgba(255,214,120,0)');
-  ctx.fillStyle = ag; ctx.beginPath(); ctx.arc(14, -148, gr, 0, 7); ctx.fill();
-
-  // ears
-  for (const d of [-1, 1]) {
-    ctx.save(); ctx.translate(d * 40, -92); ctx.rotate(d * .4);
-    ctx.fillStyle = '#f6cf9a'; ctx.beginPath(); ctx.ellipse(0, 0, 14, 21, 0, 0, 7); ctx.fill();
-    ctx.fillStyle = '#f4a9a6'; ctx.beginPath(); ctx.ellipse(0, 2, 7, 12, 0, 0, 7); ctx.fill();
-    ctx.restore();
+function drawParticles(dt, t) {
+  fctx.clearRect(0, 0, stage.clientWidth, stage.clientHeight);
+  fctx.textAlign = 'center';
+  for (const p of particles) {
+    p.l -= dt; p.y += p.vy * dt; p.x += p.vx * dt + Math.sin(t * 2 + p.ph) * .4;
+    fctx.globalAlpha = clamp(p.l / 2.2, 0, 1);
+    fctx.fillStyle = p.c;
+    fctx.font = p.size + 'px Georgia, serif';
+    fctx.fillText(p.g, p.x, p.y);
   }
+  fctx.globalAlpha = 1;
+  particles = particles.filter(p => p.l > 0);
+}
 
-  // feet
-  ctx.fillStyle = '#e8b57a';
-  for (const d of [-1, 1]) { ctx.beginPath(); ctx.ellipse(d * 27, -5, 16, 9, 0, 0, 7); ctx.fill(); }
+// ---- The winding key ----
+// It turns around its own shaft. Faster while the music plays, and it settles face-on when paused.
+let keyAngle = 0, keyVel = 0;
+function windKey() { keyVel += 300; }
 
-  // body
-  const bg = ctx.createRadialGradient(0, -64, 6, 0, -50, 72);
-  bg.addColorStop(0, '#fff6e2'); bg.addColorStop(1, '#f1c086');
-  ctx.fillStyle = bg; ctx.beginPath(); ctx.ellipse(0, -50, 62, 54, 0, 0, 7); ctx.fill();
-  ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.beginPath(); ctx.ellipse(0, -32, 34, 26, 0, 0, 7); ctx.fill();
-
-  // cheeks
-  ctx.fillStyle = 'rgba(255,128,128,.45)';
-  for (const d of [-1, 1]) { ctx.beginPath(); ctx.arc(d * 39, -42, 9, 0, 7); ctx.fill(); }
-
-  // eyes: wide open when paused, peaceful closed arcs while the music plays
-  for (const d of [-1, 1]) {
-    const ex = d * 22, ey = -58;
-    if (open) {
-      ctx.fillStyle = '#2a1a2e'; ctx.beginPath(); ctx.ellipse(ex, ey, 7, 9, 0, 0, 7); ctx.fill();
-      ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(ex + 2.5, ey - 3, 2.6, 0, 7); ctx.fill();
-    } else {
-      ctx.strokeStyle = '#2a1a2e'; ctx.lineWidth = 3;
-      ctx.beginPath(); ctx.arc(ex, ey - 2, 7, .12 * Math.PI, .88 * Math.PI); ctx.stroke();
-    }
-  }
-
-  // mouth: a little "o" that opens and closes while humming
-  if (m > 0) {
-    ctx.fillStyle = '#7a2e3a';
-    ctx.beginPath(); ctx.ellipse(0, -40, 4 + m * 3, 3 + m * 6, 0, 0, 7); ctx.fill();
+function updateKey(dt, t) {
+  const key = $('key');
+  if (calm) {
+    keyAngle = playing ? Math.sin(t * 2) * 14 : 0;
+  } else if (playing) {
+    keyVel += (bpm * 2 - keyVel) * (1 - Math.exp(-dt * 2.5));
+    keyAngle += keyVel * dt;
   } else {
-    ctx.strokeStyle = '#2a1a2e'; ctx.lineWidth = 2.5;
-    ctx.beginPath(); ctx.arc(0, -44, 6, .2 * Math.PI, .8 * Math.PI); ctx.stroke();
+    keyVel *= Math.exp(-dt * 2.2);
+    if (keyVel > 25) keyAngle += keyVel * dt;
+    else keyAngle += (Math.round(keyAngle / 180) * 180 - keyAngle) * (1 - Math.exp(-dt * 5));
   }
-  ctx.restore();
+  const edge = Math.abs(Math.cos(keyAngle * Math.PI / 180));        // 1 = facing us, 0 = edge-on
+  key.style.transform = 'perspective(260px) rotateX(' + keyAngle.toFixed(2) + 'deg)';
+  key.style.filter = 'brightness(' + (.82 + .18 * edge).toFixed(3) + ')';
 }
 
-function drawBox() {
-  const { y0, rollH, rowH, combX, colW, pad } = L;
+// ---- Main loop ----
+let t = 0, last = performance.now(), bounce = 0;
+const box = $('box');
 
-  // wooden case
-  const g = ctx.createLinearGradient(0, y0, 0, y0 + rollH);
-  g.addColorStop(0, '#4d3122'); g.addColorStop(1, '#26160f');
-  ctx.fillStyle = g; rr(8, y0, W - 16, rollH + 10, 18); ctx.fill();
-  ctx.strokeStyle = 'rgba(255,190,110,.28)'; ctx.lineWidth = 1.5; ctx.stroke();
-
-  // roll bed
-  ctx.fillStyle = '#1b100b'; rr(combX, y0 + 8, W - 14 - combX, rollH - 16, 10); ctx.fill();
-  ctx.strokeStyle = 'rgba(255,200,130,.07)'; ctx.lineWidth = 1;
-  for (let r = 0; r < ROWS; r++) {
-    ctx.beginPath(); ctx.moveTo(combX, rowY(r)); ctx.lineTo(W - 14, rowY(r)); ctx.stroke();
-  }
-
-  // pins scroll past the comb
-  ctx.save();
-  rr(combX, y0 + 8, W - 14 - combX, rollH - 16, 10); ctx.clip();
-  const k0 = Math.floor(pos) - 1, k1 = k0 + Math.ceil((W - combX) / colW) + 3;
-  for (let k = k0; k <= k1; k++) {
-    const x = combX + (k - pos) * colW, st = ((k % STEPS) + STEPS) % STEPS;
-    if (st % 4 === 0) {
-      ctx.strokeStyle = st === 0 ? 'rgba(255,200,130,.22)' : 'rgba(255,200,130,.08)';
-      ctx.beginPath(); ctx.moveTo(x, y0 + 8); ctx.lineTo(x, y0 + rollH - 8); ctx.stroke();
-    }
-    for (let r = 0; r < ROWS; r++) {
-      const y = rowY(r);
-      if (pat[r][st]) {
-        const near = Math.max(0, 1 - Math.abs(x - combX) / (colW * .6));
-        ctx.fillStyle = 'hsl(' + hue(r) + ',85%,' + (66 + near * 14) + '%)';
-        if (near > 0) { ctx.shadowColor = 'hsl(' + hue(r) + ',100%,65%)'; ctx.shadowBlur = 16 * near; }
-        ctx.beginPath(); ctx.arc(x, y, 6.5 + near * 2.5, 0, 7); ctx.fill();
-        ctx.shadowBlur = 0;
-      } else {
-        ctx.fillStyle = 'rgba(255,220,170,.16)';
-        ctx.beginPath(); ctx.arc(x, y, 2.2, 0, 7); ctx.fill();
-      }
-    }
-  }
-  ctx.restore();
-
-  // comb: tines of different lengths that shiver when a pin plucks them
-  ctx.fillStyle = '#b98a3e';
-  ctx.beginPath(); ctx.moveTo(14, y0 + pad - 4); ctx.lineTo(14 + (combX - 60) * ROWS / 14 + 16, y0 + pad - 4);
-  ctx.lineTo(14, y0 + rollH - pad + 4); ctx.closePath(); ctx.fill();
-  ctx.lineCap = 'round';
-  for (let r = 0; r < ROWS; r++) {
-    const y = rowY(r), sx = 18 + r * (combX - 60) / 14;
-    const wob = Math.sin(t * 70) * rowGlow[r] * 2.5;
-    ctx.strokeStyle = rowGlow[r] > .05 ? 'hsl(' + hue(r) + ',90%,75%)' : '#e6c27a';
-    ctx.lineWidth = 3.5 - r * .15;
-    ctx.beginPath(); ctx.moveTo(sx, y); ctx.lineTo(combX - 4, y + wob); ctx.stroke();
-  }
-
-  // playhead at the comb
-  ctx.strokeStyle = 'rgba(255,214,140,' + (.35 + glow * .4) + ')'; ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.moveTo(combX, y0 + 8); ctx.lineTo(combX, y0 + rollH - 8); ctx.stroke();
-}
-
-function drawNotes(dt) {
-  ctx.font = '18px Georgia, serif'; ctx.textAlign = 'center';
-  for (const n of notes) {
-    n.x += n.vx * dt; n.y += n.vy * dt; n.l -= dt;
-    ctx.fillStyle = 'hsla(' + n.h + ',90%,72%,' + Math.max(0, n.l / 1.7) + ')';
-    ctx.fillText(n.g, n.x, n.y);
-  }
-  notes = notes.filter(n => n.l > 0);
-}
-
-// ---- Main loop (always running so Pip keeps breathing) ----
-function frame(nowMs) {
-  const dt = Math.min((nowMs - last) / 1000, .05);
-  last = nowMs; t += dt;
+function frame(ms) {
+  const dt = Math.min((ms - last) / 1000, .05);
+  last = ms; t += dt;
   const now = ac ? ac.currentTime : 0;
 
-  // react to notes as the audio clock reaches them
+  // react to each note as the audio clock reaches it
   while (events.length && events[0].t <= now) {
     const e = events.shift();
-    e.rows.forEach(r => { rowGlow[r] = 1; burst(r); });
-    bounce = 1; glow = 1;
-    if (e.hum) singUntil = e.t + e.hum;
+    burst(e.rows.length > 1 ? 2 : 1);
+    bounce = 1;
   }
-  // where the roll is, straight from the audio clock
-  while (steps.length > 1 && steps[1].t <= now) steps.shift();
-  if (steps.length) {
-    const s = steps[0];
-    pos = clamp(s.abs + (now - s.t) / s.sd, s.abs - 1, s.abs + 1);
-  }
+  bounce *= Math.exp(-dt * 6);
 
-  const d = Math.exp(-dt * 6);
-  bounce *= d; glow *= Math.exp(-dt * 3);
-  for (let r = 0; r < ROWS; r++) rowGlow[r] *= Math.exp(-dt * 5);
-  const swayTarget = playing && !calm ? Math.sin(t * Math.PI * bpm / 60) * .05 : 0;
-  sway += (swayTarget - sway) * .1;
+  updateKey(dt, t);
 
-  layout();
-  drawSky();
-  const s = clamp((L.y0 - 50) / 175, .45, 1.15);
-  drawPip(W / 2, L.y0 + 10, s);
-  drawBox();
-  drawNotes(dt);
+  // the music box gives a tiny hop on each note
+  box.style.transform = calm ? '' : 'translateY(' + (-bounce * 3).toFixed(2) + 'px)';
+
+  drawParticles(dt, t);
   requestAnimationFrame(frame);
 }
 
