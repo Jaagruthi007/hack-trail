@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pip the Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',sans-serif}
+  .hero{position:relative;width:100%;overflow:hidden;background:#8E7CC3;transition:background-color 650ms cubic-bezier(0.4,0,0.2,1)}
+  .stage{position:relative;width:100%;height:100vh;overflow:hidden}
+  .abs{position:absolute}
+
+  .grain{inset:0;pointer-events:none;z-index:50;opacity:.4;background-size:200px 200px;background-repeat:repeat;
+    background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E")}
+
+  .ghost{left:0;right:0;top:18%;display:flex;align-items:center;justify-content:center;pointer-events:none;user-select:none;z-index:2}
+  .ghost span{font-family:'Anton',sans-serif;font-size:clamp(90px,28vw,380px);font-weight:900;color:#fff;line-height:1;text-transform:uppercase;letter-spacing:-.02em;white-space:nowrap}
+
+  .brand{top:24px;left:16px;z-index:60;font-size:12px;font-weight:600;text-transform:uppercase;color:#fff;opacity:.9;letter-spacing:.18em}
+
+  .carousel{inset:0;z-index:3}
+  .figure{position:absolute;aspect-ratio:.6/1;will-change:transform,filter,opacity;
+    transition:transform 650ms cubic-bezier(0.4,0,0.2,1),filter 650ms cubic-bezier(0.4,0,0.2,1),opacity 650ms cubic-bezier(0.4,0,0.2,1),left 650ms cubic-bezier(0.4,0,0.2,1)}
+  .figure img{width:100%;height:100%;object-fit:contain;object-position:bottom center;display:block;-webkit-user-drag:none}
+
+  .copy{bottom:24px;left:16px;z-index:60;max-width:320px}
+  .copy h2{font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.02em;color:#fff;opacity:.95;margin-bottom:8px}
+  .copy p{display:none;font-size:12px;color:#fff;opacity:.85;line-height:1.6;margin-bottom:16px}
+  .btns{display:flex;gap:12px}
+  .btn{width:48px;height:48px;border-radius:50%;background:transparent;border:2px solid #fff;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 150ms,background-color 150ms}
+  .btn:hover{transform:scale(1.08);background:rgba(255,255,255,.12)}
+  .btn:focus-visible,.link:focus-visible{outline:3px solid #fff;outline-offset:4px}
+  .btn svg{width:26px;height:26px}
+
+  .link{bottom:24px;right:16px;z-index:60;display:flex;align-items:center;gap:8px;font-family:'Anton',sans-serif;font-size:clamp(20px,4vw,56px);font-weight:400;color:#fff;opacity:.95;transition:opacity 200ms;letter-spacing:-.02em;line-height:1;text-transform:uppercase;text-decoration:none}
+  .link:hover{opacity:1}
+  .link svg{width:20px;height:20px}
+
+  @media (min-width:640px){
+    .brand{left:32px}
+    .copy{bottom:80px;left:96px}
+    .copy h2{font-size:22px;margin-bottom:12px}
+    .copy p{display:block;font-size:14px;margin-bottom:20px}
+    .btn{width:64px;height:64px}
+    .link{bottom:80px;right:40px}
+    .link svg{width:32px;height:32px}
+  }
+  @media (prefers-reduced-motion:reduce){.hero,.figure{transition-duration:1ms}}
+</style>
+</head>
+<body>
+<div class="hero" id="hero">
+  <div class="stage">
+    <div class="abs grain"></div>
+    <div class="abs ghost"><span>PIP</span></div>
+    <div class="abs brand">PIP THE ENGINEER</div>
+    <div class="abs carousel" id="carousel"></div>
+
+    <div class="abs copy">
+      <h2>PIP, JUNIOR ENGINEER</h2>
+      <p>Pip ships tiny commits from a big cloud. One skull face, one star lantern, zero production incidents before nap time. Say hi to the newest engineer on the team.</p>
+      <div class="btns">
+        <button class="btn" id="prev" aria-label="Previous picture of Pip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+        </button>
+        <button class="btn" id="next" aria-label="Next picture of Pip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <a class="abs link" href="#">MEET PIP
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </a>
+  </div>
+</div>
+
+<script>
+const IMAGES = [
+  { src: 'pip-portrait.png', alt: 'Pip the junior engineer, sitting on a cloud holding a star lantern and a unicorn music box', bg: '#8E7CC3' },
+  { src: 'pip-avatar.png',   alt: 'Pip waving hello from a cloud', bg: '#E7799F' },
+  { src: 'pip-portrait.png', alt: 'Pip the junior engineer, sitting on a cloud holding a star lantern and a unicorn music box', bg: '#5FA8D3' },
+  { src: 'pip-avatar.png',   alt: 'Pip waving hello from a cloud', bg: '#4FB0A5' },
+];
+
+let activeIndex = 0, isAnimating = false, isMobile = window.innerWidth < 640;
+const hero = document.getElementById('hero');
+const carousel = document.getElementById('carousel');
+
+// preload
+IMAGES.forEach(({src}) => { const i = new Image(); i.src = src; });
+
+// build figures
+const figures = IMAGES.map(item => {
+  const d = document.createElement('div');
+  d.className = 'figure';
+  const img = document.createElement('img');
+  img.src = item.src; img.alt = item.alt; img.draggable = false;
+  d.appendChild(img); carousel.appendChild(d);
+  return d;
+});
+
+function roleStyle(role) {
+  if (role === 'center') return {
+    transform: `translateX(-50%) scale(${isMobile ? 1.25 : 1.68})`, filter: 'blur(0px)', opacity: 1, zIndex: 20,
+    left: '50%', height: isMobile ? '60%' : '92%', bottom: isMobile ? '22%' : '0'
+  };
+  if (role === 'back') return {
+    transform: 'translateX(-50%) scale(1)', filter: 'blur(4px)', opacity: 1, zIndex: 5,
+    left: '50%', height: isMobile ? '13%' : '22%', bottom: isMobile ? '32%' : '12%'
+  };
+  return { // left / right
+    transform: 'translateX(-50%) scale(1)', filter: 'blur(2px)', opacity: 0.85, zIndex: 10,
+    left: role === 'left' ? (isMobile ? '20%' : '30%') : (isMobile ? '80%' : '70%'),
+    height: isMobile ? '16%' : '28%', bottom: isMobile ? '32%' : '12%'
+  };
+}
+
+function render() {
+  const left = (activeIndex + 3) % 4, right = (activeIndex + 1) % 4;
+  hero.style.backgroundColor = IMAGES[activeIndex].bg;
+  figures.forEach((el, i) => {
+    const role = i === activeIndex ? 'center' : i === left ? 'left' : i === right ? 'right' : 'back';
+    Object.assign(el.style, roleStyle(role));
+  });
+}
+
+function navigate(dir) {
+  if (isAnimating) return;
+  isAnimating = true;
+  activeIndex = dir === 'next' ? (activeIndex + 1) % 4 : (activeIndex + 3) % 4;
+  render();
+  setTimeout(() => { isAnimating = false; }, 650);
+}
+
+document.getElementById('prev').addEventListener('click', () => navigate('prev'));
+document.getElementById('next').addEventListener('click', () => navigate('next'));
+window.addEventListener('resize', () => { isMobile = window.innerWidth < 640; render(); });
+
+render();
+</script>
+</body>
+</html>
