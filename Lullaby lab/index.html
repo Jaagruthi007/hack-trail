@@ -1,64 +1,44 @@
-<!-- ===================== THE LULLABY LAB ===================== -->
-<section class="lullaby-lab" id="lullabyLab" aria-labelledby="llTitle">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Lullaby Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="stage">
+    <a id="back" href="../../index.html">← Back to Pip</a>
+    <canvas id="c" aria-label="Pip sitting on a music box that plays a lullaby"></canvas>
+    <div id="hud"><span id="song">Pip's lullaby</span></div>
 
-  <header class="ll-head">
-    <div class="ll-pip" aria-hidden="true">
-      <img class="ll-pip-img ll-pip-night" src="pip_night.png" alt="" />
-      <img class="ll-pip-img ll-pip-day" src="pip_day.png" alt="" />
+    <div id="panel">
+      <h1>The Lullaby Lab</h1>
+      <p>Pip has been writing tiny lullabies for the sleepy hours. Wind up the music box and Pip will hum along.</p>
+      <p>Click or tap the dots on the roll to add or remove pins. Pip will play whatever you compose.</p>
+      <button id="go" class="main">Wind it up</button>
     </div>
-    <div class="ll-head-text">
-      <p class="ll-eyebrow">Pip's Nursery · Experiment #1</p>
-      <h2 id="llTitle">🎶 The Lullaby Lab</h2>
-      <p class="ll-sub">Pip built a tiny music-box engine. Wind it up and it composes a brand-new lullaby, just for you.</p>
+  </div>
+
+  <div id="bar">
+    <button id="play" class="main">Play</button>
+    <button id="new">New lullaby</button>
+
+    <div class="moods" role="group" aria-label="Mood">
+      <button data-m="sleepy" aria-pressed="true">Sleepy</button>
+      <button data-m="dreamy" aria-pressed="false">Dreamy</button>
+      <button data-m="moonlit" aria-pressed="false">Moonlit</button>
     </div>
-  </header>
 
-  <div class="ll-now" aria-live="polite">
-    <span class="ll-seed" id="llSeed">Lullaby #0000</span>
-    <strong class="ll-song" id="llSong">Winding up…</strong>
-    <p class="ll-pipnote" id="llNote"></p>
-  </div>
-
-  <div class="ll-roll-wrap">
-    <canvas class="ll-roll" id="llRoll" role="img" aria-label="A music box pin cylinder showing the notes of the lullaby"></canvas>
-  </div>
-  <div class="ll-bars" id="llBars" aria-hidden="true"></div>
-
-  <div class="ll-controls">
-    <button class="ll-btn ll-play" id="llPlay" type="button" aria-pressed="false">
-      <span class="ll-play-ico" aria-hidden="true">▶</span><span class="ll-play-label">Play</span>
-    </button>
-    <button class="ll-btn ll-ghost" id="llCompose" type="button">🎲 Compose a new one</button>
-
-    <label class="ll-field">Tempo
-      <input type="range" id="llTempo" min="36" max="100" value="54" />
-      <output id="llTempoOut" for="llTempo">54</output>
+    <label class="tempo">Tempo
+      <input id="bpm" type="range" min="40" max="110" value="64">
+      <output id="bpmv">64</output>
     </label>
 
-    <label class="ll-field">Sound
-      <select id="llSound">
-        <option value="musicbox">Music box</option>
-        <option value="glass">Glass bells</option>
-        <option value="harp">Soft harp</option>
-      </select>
-    </label>
-
-    <label class="ll-field">Sleep timer
-      <select id="llSleep">
-        <option value="0">Off</option>
-        <option value="2">2 min</option>
-        <option value="5">5 min</option>
-        <option value="10">10 min</option>
-      </select>
-    </label>
-
-    <label class="ll-check"><input type="checkbox" id="llEndless" /> ✨ Keep dreaming <small>(auto-compose the next one)</small></label>
+    <label class="chk"><input type="checkbox" id="hum" checked> Pip hums along</label>
+    <button id="clear">Clear pins</button>
   </div>
 
-  <div class="ll-play-along">
-    <p>Play along with Pip:</p>
-    <div class="ll-keys" id="llKeys"></div>
-  </div>
-
-</section>
-<!-- ===================== /THE LULLABY LAB ===================== -->
+  <script src="script.js"></script>
+</body>
+</html>
