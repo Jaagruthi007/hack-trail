@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Pip's Nightlight Collection ✨</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap"
+        rel="stylesheet" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --font-heading: "Fredoka", "Trebuchet MS", sans-serif;
+            --font-body: "Nunito", "Trebuchet MS", sans-serif;
+            --active-glow-color: #ffe6a6;
+            --active-glow-rgb: 255, 230, 166;
+            --glow-intensity: 0.85;
+            --lamp-drop-shadow: drop-shadow(0 0 calc(20px * var(--glow-intensity)) rgba(var(--active-glow-rgb), 0.95));
+            --bg-ambient: radial-gradient(circle at 50% 25%, rgba(var(--active-glow-rgb), 0.22) 0%, transparent 60%);
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: linear-gradient(180deg, #121435 0%, #2a2050 40%, #583e6b 75%, #f3bfd2 100%);
+            color: #fff8fb;
+            min-height: 100vh;
+            text-align: center;
+            position: relative;
+            overflow-x: hidden;
+            padding-bottom: 50px;
+            transition: background 0.8s ease;
+        }
+
+        /* Interactive ambient glow layer that shifts with selected nightlight */
+        .ambient-glow-layer {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-ambient);
+            pointer-events: none;
+            z-index: 0;
+            transition: background 0.8s ease, opacity 0.5s ease;
+            opacity: var(--glow-intensity);
+        }
+
+        /* Twinkling star field */
+        .starfield {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: #ffffff;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: twinkle-star var(--duration, 3s) ease-in-out infinite;
+        }
+
+        @keyframes twinkle-star {
+
+            0%,
+            100% {
+                opacity: 0.2;
+                transform: scale(0.8);
+            }
+
+            50% {
+                opacity: 0.9;
+                transform: scale(1.3);
+            }
+        }
+
+        header {
+            position: relative;
+            z-index: 1;
+            padding: 30px 16px 15px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffffff;
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 24px;
+            padding: 10px 20px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            font-weight: 700;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .back:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .audio-toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #ffe6f2;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 600;
+            backdrop-filter: blur(8px);
+            transition: all 0.2s ease;
+        }
+
+        .audio-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.22);
+            transform: scale(1.04);
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(2.1rem, 6vw, 3.4rem);
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 4px 18px rgba(0, 0, 0, 0.35), 0 0 30px rgba(255, 230, 166, 0.4);
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+            color: #f7dff0;
+            font-weight: 500;
+        }
+
+        /* Bedside Showcase Stage */
+        .bedside-stage {
+            position: relative;
+            z-index: 1;
+            max-width: 720px;
+            margin: 15px auto 25px;
+            padding: 18px 24px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 28px;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: 0 15px 35px rgba(18, 14, 40, 0.35);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-around;
+            gap: 20px;
+        }
+
+        .sleeper-preview {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-align: left;
+        }
+
+        .sleeper-img-wrap {
+            position: relative;
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
+            display: grid;
+            place-items: center;
+        }
+
+        .sleeper-img {
+            width: 68px;
+            height: auto;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+            animation: gentle-sleep 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes gentle-sleep {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            100% {
+                transform: translateY(-5px) rotate(2deg);
+            }
+        }
+
+        .zzz-bubble {
+            position: absolute;
+            top: -8px;
+            right: -5px;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            color: #ffd47a;
+            font-size: 0.95rem;
+            animation: float-zzz 2.5s ease-in-out infinite;
+        }
+
+        @keyframes float-zzz {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(0.9);
+                opacity: 0.4;
+            }
+
+            50% {
+                transform: translate(4px, -8px) scale(1.15);
+                opacity: 1;
+            }
+        }
+
+        .sleeper-text h3 {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            color: #fff3d6;
+            margin-bottom: 4px;
+        }
+
+        .sleeper-text p {
+            font-size: 0.9rem;
+            color: #e5d7f7;
+        }
+
+        .active-lamp-showcase {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 10px 18px;
+        }
+
+        .active-lamp-icon {
+            font-size: 2.2rem;
+            filter: var(--lamp-drop-shadow);
+            animation: pulse-active 2.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse-active {
+            0% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 10px rgba(var(--active-glow-rgb), 0.7));
+            }
+
+            100% {
+                transform: scale(1.12);
+                filter: drop-shadow(0 0 24px rgba(var(--active-glow-rgb), 1));
+            }
+        }
+
+        /* Glow Intensity Controller */
+        .glow-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: #f7d7ed;
+            font-weight: 600;
+        }
+
+        .glow-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .glow-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #ffd47a;
+            box-shadow: 0 0 10px #ffd47a;
+            cursor: pointer;
+            transition: transform 0.15s ease;
+        }
+
+        .glow-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.25);
+        }
+
+        /* Collection Grid */
+        .collection {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            max-width: 980px;
+            padding: 16px 24px 30px;
+            margin: auto;
+        }
+
+        .card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 26px;
+            padding: 30px 22px 24px;
+            box-shadow: 0 12px 32px rgba(23, 17, 43, 0.35);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.65);
+            box-shadow: 0 20px 45px rgba(23, 17, 43, 0.45), 0 0 25px rgba(var(--card-glow-rgb, 255, 230, 166), 0.35);
+        }
+
+        .card.is-active {
+            background: rgba(255, 255, 255, 0.22);
+            border-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 20px 40px rgba(18, 14, 40, 0.5), 0 0 35px rgba(var(--card-glow-rgb, 255, 230, 166), 0.55);
+            transform: translateY(-6px);
+        }
+
+        .card.is-active::after {
+            content: "✦ Pip's Choice Tonight";
+            position: absolute;
+            top: -12px;
+            background: linear-gradient(135deg, #ffd77a, #ffa73b);
+            color: #2b184f;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            letter-spacing: 0.3px;
+        }
+
+        .lamp-wrapper {
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .lamp {
+            font-size: 4.8rem;
+            display: block;
+            filter: drop-shadow(0 0 18px var(--card-glow, #ffe6a6));
+            transition: transform 0.3s ease, filter 0.3s ease;
+            user-select: none;
+        }
+
+        .card:hover .lamp {
+            transform: scale(1.15) rotate(3deg);
+            filter: drop-shadow(0 0 28px var(--card-glow, #ffe6a6));
+        }
+
+        .card h2 {
+            font-family: var(--font-heading);
+            color: #ffe6f2;
+            font-size: 1.55rem;
+            font-weight: 700;
+            margin: 10px 0 8px;
+        }
+
+        .card-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff1b8;
+            padding: 3px 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            line-height: 1.6;
+            color: #fff0fa;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .card button {
+            background: #ffe3f0;
+            color: #49355e;
+            border: 0;
+            border-radius: 22px;
+            padding: 12px 22px;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-weight: 800;
+            font-size: 0.95rem;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            width: 100%;
+        }
+
+        .card button:hover {
+            background: #ffffff;
+            color: #371d4d;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+        }
+
+        .card.is-active button {
+            background: linear-gradient(135deg, #ffd77a, #ffb347);
+            color: #2b184f;
+            font-weight: 800;
+            box-shadow: 0 4px 16px rgba(255, 180, 71, 0.4);
+        }
+
+        #message {
+            position: relative;
+            z-index: 1;
+            min-height: 48px;
+            padding: 8px 20px 24px;
+            color: #fff2c4;
+            font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        /* Sparkle burst animation for clicks */
+        .sparkle-burst {
+            position: absolute;
+            pointer-events: none;
+            font-size: 1.2rem;
+            animation: sparkle-anim 0.85s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+            z-index: 99;
+        }
+
+        @keyframes sparkle-anim {
+            0% {
+                transform: translate(0, 0) scale(0.6);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(1.4);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive tuning */
+        @media (max-width: 600px) {
+            header {
+                padding: 25px 14px 10px;
+            }
+
+            .collection {
+                gap: 16px;
+                padding: 12px 16px 24px;
+            }
+
+            .bedside-stage {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .sleeper-preview {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Ambient backdrop lighting -->
+    <div class="ambient-glow-layer" id="ambientLayer" aria-hidden="true"></div>
+    <div class="starfield" id="starfield" aria-hidden="true"></div>
+
+    <header>
+        <div class="top-nav">
+            <a class="back" href="index.html">← Back to Pip's world</a>
+            <button class="audio-toggle-btn" id="audioToggleBtn" type="button" aria-label="Toggle chime sounds">
+                <span id="audioIcon">🔔</span> <span id="audioLabel">Sound On</span>
+            </button>
+        </div>
+        <h1>🌙 Pip's Nightlight Collection ✨</h1>
+        <p>Little lights for big dreams.</p>
+    </header>
+
+    <!-- Interactive Bedside preview -->
+    <section class="bedside-stage" aria-label="Bedside preview">
+        <div class="sleeper-preview">
+            <div class="sleeper-img-wrap">
+                <img class="sleeper-img" src="pip_night.png" alt="Pip resting peacefully"
+                    onerror="this.style.display='none'; document.getElementById('altPip').style.display='block';" />
+                <span id="altPip" style="display:none; font-size: 2.8rem;">😴</span>
+                <span class="zzz-bubble">z Z</span>
+            </div>
+            <div class="sleeper-text">
+                <h3 id="bedsideTitle">Pip is dreaming softly</h3>
+                <p id="bedsideSub">Choose a nightlight below to brighten Pip's nursery</p>
+            </div>
+        </div>
+
+        <div class="active-lamp-showcase">
+            <div class="active-lamp-icon" id="activeLampIcon">🌙</div>
+            <div class="glow-controls">
+                <label for="glowSlider">Glow:</label>
+                <input type="range" class="glow-slider" id="glowSlider" min="0.3" max="1.0" step="0.05" value="0.85"
+                    aria-label="Nightlight glow brightness" />
+            </div>
+        </div>
+    </section>
+
+    <!-- Nightlight Cards Collection -->
+    <main class="collection" id="collectionGrid">
+        <article class="card is-active" id="card-Moonbeam" data-color="#ffe6a6" data-rgb="255, 230, 166"
+            style="--card-glow: #ffe6a6; --card-glow-rgb: 255, 230, 166;">
+            <div class="lamp-wrapper">
+                <div class="lamp" role="img" aria-label="Moonbeam crescent moon">🌙</div>
+            </div>
+            <span class="card-badge">✦ Lunar Slumber</span>
+            <h2>Moonbeam</h2>
+            <p>A sleepy moon that glows softly while Pip dreams.</p>
+            <button onclick="chooseLight('Moonbeam')">Choose this light</button>
+        </article>
+
+        <article class="card" id="card-Starry-Wish" data-color="#ffd56b" data-rgb="255, 213, 107"
+            style="--card-glow: #ffd56b; --card-glow-rgb: 255, 213, 107;">
+            <div class="lamp-wrapper">
+                <div class="lamp" role="img" aria-label="Starry wish golden star">⭐</div>
+            </div>
+            <span class="card-badge">✦ Wish Guardian</span>
+            <h2>Starry Wish</h2>
+            <p>A tiny star to keep all of Pip's wishes safe.</p>
+            <button onclick="chooseLight('Starry Wish')">Choose this light</button>
+        </article>
+
+        <article class="card" id="card-Fairy-Mushroom" data-color="#f8a5c2" data-rgb="248, 165, 194"
+            style="--card-glow: #f8a5c2; --card-glow-rgb: 248, 165, 194;">
+            <div class="lamp-wrapper">
+                <div class="lamp" role="img" aria-label="Fairy mushroom mystical mushroom">🍄</div>
+            </div>
+            <span class="card-badge">✦ Forest Whimsy</span>
+            <h2>Fairy Mushroom</h2>
+            <p>A magical forest glow for the sweetest bedtime stories.</p>
+            <button onclick="chooseLight('Fairy Mushroom')">Choose this light</button>
+        </article>
+
+        <article class="card" id="card-Cloud-Cuddle" data-color="#a4d8ff" data-rgb="164, 216, 255"
+            style="--card-glow: #a4d8ff; --card-glow-rgb: 164, 216, 255;">
+            <div class="lamp-wrapper">
+                <div class="lamp" role="img" aria-label="Cloud cuddle fluffy cloud">☁️</div>
+            </div>
+            <span class="card-badge">✦ Cozy Breeze</span>
+            <h2>Cloud Cuddle</h2>
+            <p>A fluffy little cloud to make nighttime feel cozy.</p>
+            <button onclick="chooseLight('Cloud Cuddle')">Choose this light</button>
+        </article>
+    </main>
+
+    <p id="message" aria-live="polite">Pick a little light for tonight 💗</p>
+
+    <script>
+        // Audio synthesizer for soft bedtime chime
+        let audioEnabled = true;
+        let audioCtx = null;
+
+        function playBedtimeChime(freqMultiplier = 1) {
+            if (!audioEnabled) return;
+            try {
+                if (!audioCtx) {
+                    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContextClass) audioCtx = new AudioContextClass();
+                }
+                if (!audioCtx) return;
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                const now = audioCtx.currentTime;
+                // Dreamy celesta chord: root, major 3rd, 5th, octave
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq * freqMultiplier, now + idx * 0.08);
+
+                    gain.gain.setValueAtTime(0.001, now + idx * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.12, now + idx * 0.08 + 0.04);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.08 + 1.2);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+
+                    osc.start(now + idx * 0.08);
+                    osc.stop(now + idx * 0.08 + 1.25);
+                });
+            } catch (e) {
+                // Audio synthesis fallback silently ignored if blocked by autoplay policy
+            }
+        }
+
+        // Toggle sound
+        const audioBtn = document.getElementById("audioToggleBtn");
+        const audioIcon = document.getElementById("audioIcon");
+        const audioLabel = document.getElementById("audioLabel");
+
+        if (audioBtn) {
+            audioBtn.addEventListener("click", () => {
+                audioEnabled = !audioEnabled;
+                if (audioEnabled) {
+                    audioIcon.textContent = "🔔";
+                    audioLabel.textContent = "Sound On";
+                    playBedtimeChime(1);
+                } else {
+                    audioIcon.textContent = "🔕";
+                    audioLabel.textContent = "Muted";
+                }
+            });
+        }
+
+        // Light dictionary metadata
+        const lightsConfig = {
+            "Moonbeam": {
+                emoji: "🌙",
+                rgb: "255, 230, 166",
+                hex: "#ffe6a6",
+                cardId: "card-Moonbeam",
+                freq: 1.0,
+                desc: "Moonbeam is casting a gentle lunar glow over Pip's pillow."
+            },
+            "Starry Wish": {
+                emoji: "⭐",
+                rgb: "255, 213, 107",
+                hex: "#ffd56b",
+                cardId: "card-Starry-Wish",
+                freq: 1.25,
+                desc: "Starry Wish is twinkling quietly, keeping every wish safe."
+            },
+            "Fairy Mushroom": {
+                emoji: "🍄",
+                rgb: "248, 165, 194",
+                hex: "#f8a5c2",
+                cardId: "card-Fairy-Mushroom",
+                freq: 0.9,
+                desc: "Fairy Mushroom is sprinkling enchanted forest dreams."
+            },
+            "Cloud Cuddle": {
+                emoji: "☁️",
+                rgb: "164, 216, 255",
+                hex: "#a4d8ff",
+                cardId: "card-Cloud-Cuddle",
+                freq: 1.15,
+                desc: "Cloud Cuddle has wrapped Pip in warm, fluffy comfort."
+            }
+        };
+
+        // Primary selection function (preserves user API signature)
+        function chooseLight(name, triggerEvent = null) {
+            const config = lightsConfig[name] || {
+                emoji: "✨",
+                rgb: "255, 230, 166",
+                hex: "#ffe6a6",
+                desc: name + " is glowing softly."
+            };
+
+            // 1. Update text message as requested
+            const msgEl = document.getElementById("message");
+            if (msgEl) {
+                msgEl.textContent = "✨ " + name + " is your bedtime light tonight. Sweet dreams, Pip! 💗";
+            }
+
+            // 2. Update bedside preview
+            const lampIcon = document.getElementById("activeLampIcon");
+            if (lampIcon) lampIcon.textContent = config.emoji;
+
+            const bedsideTitle = document.getElementById("bedsideTitle");
+            if (bedsideTitle) bedsideTitle.textContent = name + " is shining";
+
+            const bedsideSub = document.getElementById("bedsideSub");
+            if (bedsideSub) bedsideSub.textContent = config.desc;
+
+            // 3. Update CSS variables for full-room lighting
+            document.documentElement.style.setProperty("--active-glow-color", config.hex);
+            document.documentElement.style.setProperty("--active-glow-rgb", config.rgb);
+
+            // 4. Update card active states
+            document.querySelectorAll(".card").forEach(c => c.classList.remove("is-active"));
+            const activeCard = document.getElementById(config.cardId);
+            if (activeCard) {
+                activeCard.classList.add("is-active");
+            }
+
+            // 5. Play soft bedtime chime
+            playBedtimeChime(config.freq || 1);
+
+            // 6. Spawn sparkle particles
+            spawnSparkles(triggerEvent || (activeCard ? activeCard.querySelector('.lamp') : null));
+
+            // 7. Save choice to localStorage
+            try {
+                localStorage.setItem("pip_nightlight_selected", name);
+            } catch (e) { }
+        }
+
+        // Glow intensity slider handler
+        const glowSlider = document.getElementById("glowSlider");
+        if (glowSlider) {
+            glowSlider.addEventListener("input", (e) => {
+                const val = e.target.value;
+                document.documentElement.style.setProperty("--glow-intensity", val);
+                try {
+                    localStorage.setItem("pip_nightlight_glow", val);
+                } catch (err) { }
+            });
+        }
+
+        // Interactive card click handler (clicking anywhere on card chooses it)
+        document.querySelectorAll(".card").forEach(card => {
+            card.addEventListener("click", (e) => {
+                // If they didn't directly click the button, trigger chooseLight with this card's title
+                const title = card.querySelector("h2").textContent.trim();
+                chooseLight(title, e);
+            });
+        });
+
+        // Particle sparkles effect
+        function spawnSparkles(sourceEl) {
+            if (!sourceEl) return;
+            const rect = sourceEl.getBoundingClientRect();
+            const originX = rect.left + rect.width / 2;
+            const originY = rect.top + rect.height / 2;
+            const sparkleIcons = ["✨", "⭐", "🌟", "💫", "💖"];
+
+            for (let i = 0; i < 6; i++) {
+                const span = document.createElement("span");
+                span.className = "sparkle-burst";
+                span.textContent = sparkleIcons[Math.floor(Math.random() * sparkleIcons.length)];
+
+                const angle = (Math.PI * 2 * i) / 6 + (Math.random() - 0.5) * 0.5;
+                const dist = 40 + Math.random() * 50;
+                const tx = Math.cos(angle) * dist + "px";
+                const ty = Math.sin(angle) * dist + "px";
+
+                span.style.left = originX + "px";
+                span.style.top = originY + "px";
+                span.style.setProperty("--tx", tx);
+                span.style.setProperty("--ty", ty);
+
+                document.body.appendChild(span);
+                setTimeout(() => span.remove(), 900);
+            }
+        }
+
+        // Generate dreamy background starfield
+        function createStarfield() {
+            const starfield = document.getElementById("starfield");
+            if (!starfield) return;
+            const count = Math.min(window.innerWidth < 600 ? 35 : 70, 80);
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement("div");
+                star.className = "star";
+                const size = Math.random() * 3 + 1.5;
+                star.style.width = size + "px";
+                star.style.height = size + "px";
+                star.style.left = Math.random() * 100 + "%";
+                star.style.top = Math.random() * 100 + "%";
+                star.style.setProperty("--duration", (Math.random() * 3 + 2.5) + "s");
+                star.style.animationDelay = (Math.random() * 3) + "s";
+                starfield.appendChild(star);
+            }
+        }
+
+        createStarfield();
+
+        // Restore saved nightlight & glow preferences
+        window.addEventListener("DOMContentLoaded", () => {
+            try {
+                const savedGlow = localStorage.getItem("pip_nightlight_glow");
+                if (savedGlow && glowSlider) {
+                    glowSlider.value = savedGlow;
+                    document.documentElement.style.setProperty("--glow-intensity", savedGlow);
+                }
+                const savedLight = localStorage.getItem("pip_nightlight_selected");
+                if (savedLight && lightsConfig[savedLight]) {
+                    chooseLight(savedLight);
+                }
+            } catch (e) { }
+        });
+    </script>
+</body>
+
+</html>

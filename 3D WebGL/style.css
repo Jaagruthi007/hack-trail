@@ -1,0 +1,11 @@
+/* ---------- 3D Pip ---------- */
+#pip3d-canvas{
+  width: 100%;
+  height: min(62vh, 520px);
+  cursor: grab;
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
+#pip3d-canvas:active{ cursor: grabbing; }
+#pip3d-canvas canvas{ display:block; width:100%; height:100%; outline:none; }
+.pip-wrap.has-3d .pip3d{ display:none; }

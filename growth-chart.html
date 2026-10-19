@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Pip's Little Growth Journey 🌱 ✦ Milestones</title>
+
+    <!-- Modern storybook typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        /* ==========================================================
+       PIP'S GROWTH CHART — STYLESHEET
+       Cute, magical pastel storybook aesthetic.
+       Soft lavender, baby pink, warm cream, and dreamy sky blue.
+       ========================================================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --font-heading: "Fredoka", "Trebuchet MS", sans-serif;
+            --font-body: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+            /* Pastel palette tokens */
+            --bg-gradient: linear-gradient(180deg, #201a40 0%, #342454 20%, #583c66 50%, #90637c 80%, #fbd5dc 100%);
+            --text-main: #fff6fa;
+            --text-muted: #e2d3f0;
+            --accent-pink: #f7a8c4;
+            --accent-lavender: #cbb4f8;
+            --accent-gold: #ffdf7a;
+            --accent-mint: #bbf3d3;
+            --accent-sky: #bde4ff;
+
+            --card-bg: rgba(255, 255, 255, 0.12);
+            --card-border: rgba(255, 255, 255, 0.28);
+            --card-shadow: 0 16px 36px rgba(18, 12, 38, 0.35);
+
+            --timeline-stem: linear-gradient(180deg, #bbf3d3 0%, #ffd4e5 35%, #cbb4f8 70%, #ffdf7a 100%);
+            --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Morning Blossom palette toggle */
+        body.theme-blossom {
+            --bg-gradient: linear-gradient(180deg, #fce8f3 0%, #f0e3fb 30%, #e2effc 65%, #fef7e9 100%);
+            --text-main: #3e264e;
+            --text-muted: #6b4d7c;
+            --accent-pink: #e26992;
+            --accent-lavender: #825ec2;
+            --accent-gold: #e29f12;
+            --accent-mint: #3ba46a;
+            --accent-sky: #3b88c8;
+
+            --card-bg: rgba(255, 255, 255, 0.72);
+            --card-border: rgba(206, 178, 228, 0.45);
+            --card-shadow: 0 16px 36px rgba(110, 80, 130, 0.14);
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background 0.8s ease, color 0.5s ease;
+            position: relative;
+        }
+
+        /* Ambient floating storybook clouds & stars in background */
+        .bg-decorations {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 999px;
+            filter: blur(12px);
+            animation: float-cloud 24s ease-in-out infinite alternate;
+        }
+
+        .cloud-1 {
+            width: 340px;
+            height: 120px;
+            top: 12%;
+            left: -60px;
+            animation-duration: 28s;
+        }
+
+        .cloud-2 {
+            width: 420px;
+            height: 140px;
+            top: 52%;
+            right: -80px;
+            animation-duration: 34s;
+        }
+
+        .cloud-3 {
+            width: 260px;
+            height: 90px;
+            top: 82%;
+            left: 8%;
+            animation-duration: 22s;
+        }
+
+        @keyframes float-cloud {
+            0% {
+                transform: translateX(0) translateY(0);
+            }
+
+            100% {
+                transform: translateX(45px) translateY(-25px);
+            }
+        }
+
+        .star-twinkle {
+            position: absolute;
+            color: #ffe89e;
+            opacity: 0.6;
+            font-size: 1rem;
+            user-select: none;
+            animation: twinkle-drift var(--d, 4s) ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkle-drift {
+            0% {
+                transform: scale(0.7) rotate(0deg);
+                opacity: 0.25;
+            }
+
+            50% {
+                transform: scale(1.25) rotate(15deg);
+                opacity: 0.95;
+            }
+
+            100% {
+                transform: scale(0.8) rotate(-10deg);
+                opacity: 0.3;
+            }
+        }
+
+        /* Container */
+        .page-wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 24px 20px 80px;
+        }
+
+        /* Top Navigation Bar */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: inherit;
+            text-decoration: none;
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 0.95rem;
+            background: var(--card-bg);
+            border: 1.5px solid var(--card-border);
+            padding: 10px 18px;
+            border-radius: 999px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s var(--ease-bounce);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px) scale(1.03);
+            border-color: var(--accent-pink);
+            box-shadow: 0 8px 20px rgba(247, 168, 196, 0.3);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon-pill-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--card-bg);
+            border: 1.5px solid var(--card-border);
+            color: inherit;
+            padding: 8px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            font-weight: 700;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.25s var(--ease-bounce);
+        }
+
+        .icon-pill-btn:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-gold);
+        }
+
+        /* Header & Hero Stage */
+        .header-hero {
+            text-align: center;
+            padding: 20px 10px 30px;
+        }
+
+        .story-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 223, 122, 0.2);
+            border: 1px solid rgba(255, 223, 122, 0.45);
+            color: var(--accent-gold);
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 999px;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        body.theme-blossom .story-chip {
+            background: rgba(226, 159, 18, 0.15);
+            border-color: rgba(226, 159, 18, 0.35);
+        }
+
+        h1.page-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2.2rem, 6vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+            text-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+        }
+
+        p.page-subtitle {
+            max-width: 620px;
+            margin: 0 auto 28px;
+            font-size: clamp(1.02rem, 2.5vw, 1.2rem);
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Pip Character Showcase Card */
+        .pip-portrait-card {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--card-bg);
+            border: 1.5px solid var(--card-border);
+            border-radius: 28px;
+            padding: 14px 24px;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 35px;
+            animation: float-gentle 4.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes float-gentle {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(-7px);
+            }
+        }
+
+        .pip-avatar-wrap {
+            position: relative;
+            width: 74px;
+            height: 74px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 213, 229, 0.4) 0%, rgba(203, 180, 248, 0.15) 70%);
+            display: grid;
+            place-items: center;
+            border: 2px dashed rgba(255, 255, 255, 0.5);
+        }
+
+        .pip-avatar-img {
+            width: 64px;
+            height: auto;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+        }
+
+        .pip-sprout-badge {
+            position: absolute;
+            bottom: -6px;
+            right: -6px;
+            background: #ffffff;
+            border-radius: 50%;
+            padding: 2px 4px;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .pip-info-text {
+            text-align: left;
+        }
+
+        .pip-info-text h3 {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            color: var(--text-main);
+        }
+
+        .pip-info-text p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Progress Tracker Card */
+        .progress-card {
+            background: var(--card-bg);
+            border: 1.5px solid var(--card-border);
+            border-radius: 24px;
+            padding: 20px 24px;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 45px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .progress-title {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-count {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            color: var(--accent-gold);
+            background: rgba(255, 223, 122, 0.2);
+            padding: 4px 12px;
+            border-radius: 14px;
+            font-size: 0.85rem;
+        }
+
+        .progress-track {
+            position: relative;
+            width: 100%;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #bbf3d3, #ffd4e5, #cbb4f8, #ffdf7a);
+            border-radius: 999px;
+            transition: width 0.6s ease;
+            box-shadow: 0 0 12px rgba(255, 223, 122, 0.5);
+        }
+
+        /* Interactive filter pills */
+        .milestone-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .milestone-pill-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--card-border);
+            color: inherit;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-family: var(--font-body);
+            font-size: 0.84rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s var(--ease-bounce);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .milestone-pill-btn:hover,
+        .milestone-pill-btn.active {
+            background: var(--accent-pink);
+            color: #381b37;
+            border-color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(247, 168, 196, 0.4);
+        }
+
+        /* ==========================================================
+       VERTICAL TIMELINE ARCHITECTURE
+       ========================================================== */
+        .timeline-container {
+            position: relative;
+            margin: 40px auto;
+            padding: 20px 0;
+        }
+
+        /* Central vertical flower vine */
+        .timeline-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background: var(--timeline-stem);
+            transform: translateX(-50%);
+            border-radius: 999px;
+            box-shadow: 0 0 16px rgba(203, 180, 248, 0.5);
+        }
+
+        /* Timeline Row */
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: 16px 36px;
+            box-sizing: border-box;
+            opacity: 0;
+            transform: translateY(24px);
+            animation: appear-slide 0.7s var(--ease-bounce) forwards;
+        }
+
+        .timeline-item:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .timeline-item:nth-child(2) {
+            animation-delay: 0.25s;
+        }
+
+        .timeline-item:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .timeline-item:nth-child(4) {
+            animation-delay: 0.55s;
+        }
+
+        .timeline-item:nth-child(5) {
+            animation-delay: 0.7s;
+        }
+
+        @keyframes appear-slide {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Odd items on left, even on right */
+        .timeline-item.left {
+            left: 0;
+            text-align: right;
+        }
+
+        .timeline-item.right {
+            left: 50%;
+            text-align: left;
+        }
+
+        /* Center milestone node / badge */
+        .timeline-node {
+            position: absolute;
+            top: 26px;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 3px solid var(--accent-lavender);
+            box-shadow: 0 0 20px rgba(203, 180, 248, 0.6), 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: grid;
+            place-items: center;
+            font-size: 1.6rem;
+            z-index: 2;
+            transition: all 0.3s var(--ease-bounce);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .timeline-item.left .timeline-node {
+            right: -26px;
+        }
+
+        .timeline-item.right .timeline-node {
+            left: -26px;
+        }
+
+        .timeline-item:hover .timeline-node {
+            transform: scale(1.22) rotate(8deg);
+            border-color: var(--accent-pink);
+            box-shadow: 0 0 28px rgba(247, 168, 196, 0.85);
+        }
+
+        /* Milestone Card */
+        .milestone-card {
+            background: var(--card-bg);
+            border: 1.5px solid var(--card-border);
+            border-radius: 26px;
+            padding: 24px;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: var(--card-shadow);
+            transition: all 0.35s var(--ease-bounce);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .timeline-item.left .milestone-card {
+            text-align: left;
+            /* Keep card content naturally left-aligned inside */
+        }
+
+        .milestone-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 20px 45px rgba(20, 10, 45, 0.4), 0 0 25px rgba(203, 180, 248, 0.3);
+        }
+
+        .milestone-card.active-focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 20px 45px rgba(20, 10, 45, 0.45), 0 0 35px rgba(255, 223, 122, 0.5);
+        }
+
+        /* Card Elements */
+        .stage-badge-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .stage-label {
+            font-family: var(--font-heading);
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--accent-lavender);
+            background: rgba(203, 180, 248, 0.2);
+            padding: 3px 10px;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .milestone-date-tag {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .milestone-title-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .card-icon {
+            font-size: 1.8rem;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .milestone-card:hover .card-icon {
+            transform: scale(1.15) rotate(10deg);
+        }
+
+        .milestone-title {
+            font-family: var(--font-heading);
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .milestone-desc {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        /* Pip's Diary / Memory Note Accordion */
+        .pip-diary-box {
+            background: rgba(0, 0, 0, 0.16);
+            border: 1px dashed rgba(255, 255, 255, 0.25);
+            border-radius: 16px;
+            padding: 12px 16px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        body.theme-blossom .pip-diary-box {
+            background: rgba(255, 255, 255, 0.6);
+            border-color: rgba(130, 94, 194, 0.3);
+        }
+
+        .diary-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .diary-quote {
+            font-style: italic;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            color: var(--accent-gold);
+        }
+
+        body.theme-blossom .diary-quote {
+            color: #925f05;
+            font-weight: 600;
+        }
+
+        /* Card Action Footer */
+        .card-footer-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            padding-top: 12px;
+        }
+
+        .tag-badge {
+            font-size: 0.78rem;
+            color: var(--accent-pink);
+            font-weight: 700;
+        }
+
+        .cheer-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid var(--card-border);
+            color: inherit;
+            font-family: var(--font-body);
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.2s var(--ease-bounce);
+        }
+
+        .cheer-btn:hover {
+            background: var(--accent-pink);
+            color: #3e1e3b;
+            transform: scale(1.08);
+        }
+
+        .cheer-btn.cheered {
+            background: var(--accent-pink);
+            color: #3e1e3b;
+            border-color: #ffffff;
+        }
+
+        /* ==========================================================
+       BOTTOM CELEBRATION & CHEER COUNTER
+       ========================================================== */
+        .bottom-cheer-stage {
+            text-align: center;
+            background: var(--card-bg);
+            border: 1.5px solid var(--card-border);
+            border-radius: 32px;
+            padding: 36px 24px;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: var(--card-shadow);
+            margin-top: 40px;
+        }
+
+        .bottom-cheer-stage h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(1.6rem, 4vw, 2.2rem);
+            margin-bottom: 8px;
+        }
+
+        .bottom-cheer-stage p {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            max-width: 540px;
+            margin: 0 auto 20px;
+        }
+
+        .big-cheer-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #ffd47a, #ffa73b);
+            color: #2e174b;
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            font-weight: 700;
+            padding: 14px 32px;
+            border-radius: 999px;
+            border: 0;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(255, 170, 60, 0.45);
+            transition: all 0.3s var(--ease-bounce);
+            margin-bottom: 24px;
+        }
+
+        .big-cheer-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(255, 170, 60, 0.6);
+        }
+
+        .big-cheer-btn:active {
+            transform: scale(0.97);
+        }
+
+        .cheer-tally {
+            font-size: 0.95rem;
+            color: var(--accent-gold);
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .back-home-wrap {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .home-link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffffff;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.16);
+            border: 1.5px solid var(--card-border);
+            padding: 12px 24px;
+            border-radius: 999px;
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.25s var(--ease-bounce);
+        }
+
+        body.theme-blossom .home-link-btn {
+            color: #3e264e;
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .home-link-btn:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.28);
+            border-color: #ffffff;
+        }
+
+        /* Floating sparkle burst element */
+        .sparkle-burst {
+            position: absolute;
+            pointer-events: none;
+            font-size: 1.3rem;
+            animation: sparkle-drift 0.9s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+            z-index: 99;
+        }
+
+        @keyframes sparkle-drift {
+            0% {
+                transform: translate(0, 0) scale(0.6);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(1.3);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive adjustments for mobile devices */
+        @media (max-width: 768px) {
+            .timeline-container::before {
+                left: 24px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                padding-left: 60px;
+                padding-right: 12px;
+            }
+
+            .timeline-item.left,
+            .timeline-item.right {
+                left: 0;
+                text-align: left;
+            }
+
+            .timeline-item.left .timeline-node,
+            .timeline-item.right .timeline-node {
+                left: -2px;
+                right: auto;
+                width: 44px;
+                height: 44px;
+                font-size: 1.35rem;
+            }
+
+            .pip-portrait-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .pip-info-text {
+                text-align: center;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav-actions {
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Background decorative floating stars & soft pastel clouds -->
+    <div class="bg-decorations" aria-hidden="true" id="bgDecorations">
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
+    </div>
+
+    <div class="page-wrapper">
+        <!-- Top Navigation Bar -->
+        <header class="top-bar">
+            <a href="index.html" class="back-btn" id="backToPipWorld">
+                <span aria-hidden="true">←</span> Back to Pip's World
+            </a>
+            <div class="nav-actions">
+                <button class="icon-pill-btn" id="soundToggleBtn" type="button" aria-label="Toggle chime sound">
+                    <span id="soundIcon">🔔</span> <span id="soundLabel">Sound On</span>
+                </button>
+                <button class="icon-pill-btn" id="paletteToggleBtn" type="button" aria-label="Toggle pastel palette">
+                    <span id="paletteIcon">🌸</span> <span id="paletteLabel">Blossom Mode</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Header Stage -->
+        <section class="header-hero">
+            <div class="story-chip">✦ Bedtime Storybook Milestone Journey ✦</div>
+            <h1 class="page-title">Pip’s Little Growth Journey 🌱</h1>
+            <p class="page-subtitle">
+                Follow every sweet little step of Pip’s adventure — from a sleepy seedling in the Midnight Nursery to a
+                brave, kind bedtime guardian.
+            </p>
+
+            <!-- Pip Portrait Showcase -->
+            <div class="pip-portrait-card" id="pipPortrait">
+                <div class="pip-avatar-wrap">
+                    <img class="pip-avatar-img" src="pip_night.png" alt="Pip, the cute skull baby"
+                        onerror="this.style.display='none'; document.getElementById('pipEmojiFallback').style.display='block';" />
+                    <span id="pipEmojiFallback" style="display: none; font-size: 2.8rem;">🍼</span>
+                    <span class="pip-sprout-badge" title="Sprouting every day!">🌱</span>
+                </div>
+                <div class="pip-info-text">
+                    <h3>Pip the Dream Developer</h3>
+                    <p>Junior Dream Engineer · Currently Bloom Level 5 ✨</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Progress Indicator -->
+        <section class="progress-card" aria-label="Milestones Progress">
+            <div class="progress-header">
+                <div class="progress-title">
+                    <span>🌸 Journey Blossoms</span>
+                </div>
+                <div class="progress-count" id="progressCountText">5 of 5 Milestones Unlocked (100%)</div>
+            </div>
+            <div class="progress-track" role="progressbar" aria-valuenow="5" aria-valuemin="1" aria-valuemax="5">
+                <div class="progress-fill" id="progressFillBar" style="width: 100%;"></div>
+            </div>
+            <div class="milestone-pills" role="tablist" aria-label="Milestone Quick Navigation">
+                <button class="milestone-pill-btn active" data-target="all" type="button">✨ All Steps</button>
+                <button class="milestone-pill-btn" data-target="ms-1" type="button">🌱 Sprout</button>
+                <button class="milestone-pill-btn" data-target="ms-2" type="button">🐣 Adventure</button>
+                <button class="milestone-pill-btn" data-target="ms-3" type="button">🦋 Wings</button>
+                <button class="milestone-pill-btn" data-target="ms-4" type="button">⭐ Bright</button>
+                <button class="milestone-pill-btn" data-target="ms-5" type="button">🌙 Dreams</button>
+            </div>
+        </section>
+
+        <!-- Main Vertical Timeline -->
+        <main class="timeline-container" id="timelineContainer">
+
+            <!-- MILESTONE 1: Little Sprout -->
+            <article class="timeline-item left" id="ms-1" data-stage="1">
+                <div class="timeline-node" title="Stage 1: Little Sprout">🌱</div>
+                <div class="milestone-card" tabindex="0">
+                    <div class="stage-badge-row">
+                        <span class="stage-label">Stage 1 · Pip’s Beginning</span>
+                        <span class="milestone-date-tag">Chapter 1</span>
+                    </div>
+                    <div class="milestone-title-row">
+                        <span class="card-icon">🌱</span>
+                        <h2 class="milestone-title">Little Sprout</h2>
+                    </div>
+                    <p class="milestone-desc">
+                        Pip awakens softly inside the Midnight Nursery upon a bed of lavender clouds. With curious amber
+                        eyes, a nightcap twice his size, and a gentle crooked smile, Pip's very first dream begins to
+                        grow.
+                    </p>
+                    <div class="pip-diary-box">
+                        <span class="diary-icon">💭</span>
+                        <p class="diary-quote">"I was tiny and didn't know how to code stars yet, but my heart was
+                            completely full of curiosity."</p>
+                    </div>
+                    <footer class="card-footer-actions">
+                        <span class="tag-badge">✦ Gentle Beginnings</span>
+                        <button class="cheer-btn" type="button" onclick="cheerMilestone(this, 'Little Sprout')">
+                            <span>💖</span> <span class="cheer-text">Cheer Pip</span>
+                        </button>
+                    </footer>
+                </div>
+            </article>
+
+            <!-- MILESTONE 2: First Little Adventure -->
+            <article class="timeline-item right" id="ms-2" data-stage="2">
+                <div class="timeline-node" title="Stage 2: First Little Adventure">🐣</div>
+                <div class="milestone-card" tabindex="0">
+                    <div class="stage-badge-row">
+                        <span class="stage-label">Stage 2 · Discovery</span>
+                        <span class="milestone-date-tag">Chapter 2</span>
+                    </div>
+                    <div class="milestone-title-row">
+                        <span class="card-icon">🐣</span>
+                        <h2 class="milestone-title">First Little Adventure</h2>
+                    </div>
+                    <p class="milestone-desc">
+                        Taking brave little wobbly steps outside the nursery archway, Pip discovers the wide starfields.
+                        He makes friends with a sleepy moon-moth, catches a falling wish, and realizes that the night is
+                        soft and welcoming.
+                    </p>
+                    <div class="pip-diary-box">
+                        <span class="diary-icon">💭</span>
+                        <p class="diary-quote">"The world felt huge and sparkling! I found out that holding a little
+                            lantern makes any dark corner feel cozy."</p>
+                    </div>
+                    <footer class="card-footer-actions">
+                        <span class="tag-badge">✦ Brave Little Explorer</span>
+                        <button class="cheer-btn" type="button"
+                            onclick="cheerMilestone(this, 'First Little Adventure')">
+                            <span>💖</span> <span class="cheer-text">Cheer Pip</span>
+                        </button>
+                    </footer>
+                </div>
+            </article>
+
+            <!-- MILESTONE 3: Finding New Wings -->
+            <article class="timeline-item left" id="ms-3" data-stage="3">
+                <div class="timeline-node" title="Stage 3: Finding New Wings">🦋</div>
+                <div class="milestone-card" tabindex="0">
+                    <div class="stage-badge-row">
+                        <span class="stage-label">Stage 3 · Confidence</span>
+                        <span class="milestone-date-tag">Chapter 3</span>
+                    </div>
+                    <div class="milestone-title-row">
+                        <span class="card-icon">🦋</span>
+                        <h2 class="milestone-title">Finding New Wings</h2>
+                    </div>
+                    <p class="milestone-desc">
+                        Pip begins engineering sweet lullabies, cozy nightlights, and starry websites. He learns that
+                        making others feel safe and loved gives him invisible wings that carry his dreams higher than
+                        ever before.
+                    </p>
+                    <div class="pip-diary-box">
+                        <span class="diary-icon">💭</span>
+                        <p class="diary-quote">"Whenever you share kindness or fix a sad dream with a gentle melody,
+                            wings sprout right inside your soul!"</p>
+                    </div>
+                    <footer class="card-footer-actions">
+                        <span class="tag-badge">✦ Dream Architect</span>
+                        <button class="cheer-btn" type="button" onclick="cheerMilestone(this, 'Finding New Wings')">
+                            <span>💖</span> <span class="cheer-text">Cheer Pip</span>
+                        </button>
+                    </footer>
+                </div>
+            </article>
+
+            <!-- MILESTONE 4: Shining Bright -->
+            <article class="timeline-item right" id="ms-4" data-stage="4">
+                <div class="timeline-node" title="Stage 4: Shining Bright">⭐</div>
+                <div class="milestone-card" tabindex="0">
+                    <div class="stage-badge-row">
+                        <span class="stage-label">Stage 4 · Wisdom &amp; Heart</span>
+                        <span class="milestone-date-tag">Chapter 4</span>
+                    </div>
+                    <div class="milestone-title-row">
+                        <span class="card-icon">⭐</span>
+                        <h2 class="milestone-title">Shining Bright</h2>
+                    </div>
+                    <p class="milestone-desc">
+                        When a tiny fallen star named Twinkle forgets how to glow, Pip climbs the Great Celestial Cloud.
+                        Through patient listening, warm tea, and soft lullabies, he helps Twinkle rediscover its inner
+                        sparkle.
+                    </p>
+                    <div class="pip-diary-box">
+                        <span class="diary-icon">💭</span>
+                        <p class="diary-quote">"You don't have to be big or loud to shine. Even the smallest light can
+                            guide someone safely through the night."</p>
+                    </div>
+                    <footer class="card-footer-actions">
+                        <span class="tag-badge">✦ Star Guardian</span>
+                        <button class="cheer-btn" type="button" onclick="cheerMilestone(this, 'Shining Bright')">
+                            <span>💖</span> <span class="cheer-text">Cheer Pip</span>
+                        </button>
+                    </footer>
+                </div>
+            </article>
+
+            <!-- MILESTONE 5: Sweet Dreams -->
+            <article class="timeline-item left" id="ms-5" data-stage="5">
+                <div class="timeline-node" title="Stage 5: Sweet Dreams">🌙</div>
+                <div class="milestone-card" tabindex="0">
+                    <div class="stage-badge-row">
+                        <span class="stage-label">Stage 5 · Bedtime Hero</span>
+                        <span class="milestone-date-tag">Chapter 5</span>
+                    </div>
+                    <div class="milestone-title-row">
+                        <span class="card-icon">🌙</span>
+                        <h2 class="milestone-title">Sweet Dreams</h2>
+                    </div>
+                    <p class="milestone-desc">
+                        Now a proud junior dream guardian of the Midnight Nursery, Pip lovingly inspects every pillow,
+                        tucks in the sleepy clouds, and watches over all little dreamers. His journey continues with
+                        every warm bedtime hug!
+                    </p>
+                    <div class="pip-diary-box">
+                        <span class="diary-icon">💭</span>
+                        <p class="diary-quote">"Close your eyes, sweet friend. Pip is keeping the nursery glowing with
+                            love. Sweet dreams tonight!"</p>
+                    </div>
+                    <footer class="card-footer-actions">
+                        <span class="tag-badge">✦ Forever Dreaming</span>
+                        <button class="cheer-btn" type="button" onclick="cheerMilestone(this, 'Sweet Dreams')">
+                            <span>💖</span> <span class="cheer-text">Cheer Pip</span>
+                        </button>
+                    </footer>
+                </div>
+            </article>
+
+        </main>
+
+        <!-- Bottom Interactive Celebration Stage -->
+        <section class="bottom-cheer-stage" aria-label="Celebration and Cheers">
+            <h2>Cheer on Pip’s Little Journey! 🌸</h2>
+            <p>Send a warm hug or a cheer to Pip to let him know he is doing a wonderful job at the Midnight Nursery.
+            </p>
+
+            <button class="big-cheer-btn" id="bigCheerBtn" type="button">
+                <span>💖</span> Send Pip a Warm Cheer! ✨
+            </button>
+
+            <div class="cheer-tally" id="cheerTallyText">
+                💌 <span id="cheerCount">24</span> Cheers sent to Pip today!
+            </div>
+
+            <div class="back-home-wrap">
+                <a href="index.html" class="home-link-btn">
+                    <span>🏠</span> Back to Pip's World
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Interactive JavaScript -->
+    <script>
+        /* ==========================================================
+           PIP'S GROWTH CHART — JAVASCRIPT
+           Self-contained, beginner-friendly, and interactive.
+           ========================================================== */
+
+        // 1. Audio synthesis for soft bedtime celesta chime (Web Audio API)
+        let isSoundEnabled = true;
+        let audioContext = null;
+
+        function playSoftChime(pitchMultiplier = 1) {
+            if (!isSoundEnabled) return;
+            try {
+                const AudioClass = window.AudioContext || window.webkitAudioContext;
+                if (!audioContext && AudioClass) {
+                    audioContext = new AudioClass();
+                }
+                if (!audioContext) return;
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+
+                const now = audioContext.currentTime;
+                // Pentatonic gentle harp notes (F, G, A, C, D)
+                const chord = [349.23, 392.00, 440.00, 523.25, 587.33];
+
+                chord.forEach((freq, idx) => {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq * pitchMultiplier, now + idx * 0.06);
+
+                    gain.gain.setValueAtTime(0.0001, now + idx * 0.06);
+                    gain.gain.exponentialRampToValueAtTime(0.08, now + idx * 0.06 + 0.03);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.06 + 0.9);
+
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+
+                    osc.start(now + idx * 0.06);
+                    osc.stop(now + idx * 0.06 + 0.95);
+                });
+            } catch (err) {
+                // Fallback silently if audio is not permitted by browser
+            }
+        }
+
+        // Sound toggle listener
+        const soundToggleBtn = document.getElementById("soundToggleBtn");
+        const soundIcon = document.getElementById("soundIcon");
+        const soundLabel = document.getElementById("soundLabel");
+
+        if (soundToggleBtn) {
+            soundToggleBtn.addEventListener("click", () => {
+                isSoundEnabled = !isSoundEnabled;
+                if (isSoundEnabled) {
+                    soundIcon.textContent = "🔔";
+                    soundLabel.textContent = "Sound On";
+                    playSoftChime(1.1);
+                } else {
+                    soundIcon.textContent = "🔕";
+                    soundLabel.textContent = "Muted";
+                }
+            });
+        }
+
+        // 2. Palette Switcher (Bedtime Pastel <-> Blossom Pastel)
+        const paletteToggleBtn = document.getElementById("paletteToggleBtn");
+        const paletteIcon = document.getElementById("paletteIcon");
+        const paletteLabel = document.getElementById("paletteLabel");
+
+        if (paletteToggleBtn) {
+            paletteToggleBtn.addEventListener("click", () => {
+                const isBlossom = document.body.classList.toggle("theme-blossom");
+                if (isBlossom) {
+                    paletteIcon.textContent = "🌙";
+                    paletteLabel.textContent = "Night Mode";
+                } else {
+                    paletteIcon.textContent = "🌸";
+                    paletteLabel.textContent = "Blossom Mode";
+                }
+                playSoftChime(isBlossom ? 1.2 : 0.9);
+            });
+        }
+
+        // 3. Sparkle / Flower Burst Generator
+        function createSparkleBurst(x, y) {
+            const symbols = ["🌸", "✨", "💖", "🌱", "⭐", "🦋", "🌷"];
+            const count = 7;
+
+            for (let i = 0; i < count; i++) {
+                const sparkle = document.createElement("span");
+                sparkle.className = "sparkle-burst";
+                sparkle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+                const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.6;
+                const dist = 40 + Math.random() * 55;
+                const tx = Math.cos(angle) * dist + "px";
+                const ty = Math.sin(angle) * dist + "px";
+
+                sparkle.style.left = x + "px";
+                sparkle.style.top = y + "px";
+                sparkle.style.setProperty("--tx", tx);
+                sparkle.style.setProperty("--ty", ty);
+
+                document.body.appendChild(sparkle);
+                setTimeout(() => sparkle.remove(), 950);
+            }
+        }
+
+        // 4. Milestone Cheer Buttons
+        function cheerMilestone(button, milestoneName) {
+            const isAlreadyCheered = button.classList.contains("cheered");
+            const cheerText = button.querySelector(".cheer-text");
+
+            if (!isAlreadyCheered) {
+                button.classList.add("cheered");
+                if (cheerText) cheerText.textContent = "Cheered! 💖";
+                playSoftChime(1.25);
+            } else {
+                button.classList.remove("cheered");
+                if (cheerText) cheerText.textContent = "Cheer Pip";
+                playSoftChime(0.95);
+            }
+
+            const rect = button.getBoundingClientRect();
+            createSparkleBurst(rect.left + rect.width / 2, rect.top + window.scrollY + rect.height / 2);
+        }
+
+        // 5. Big Cheer Button at Bottom with Local Counter
+        const bigCheerBtn = document.getElementById("bigCheerBtn");
+        const cheerCountEl = document.getElementById("cheerCount");
+        let cheerCount = 24;
+
+        try {
+            const stored = localStorage.getItem("pip_growth_cheers");
+            if (stored) {
+                cheerCount = parseInt(stored, 10);
+                if (cheerCountEl) cheerCountEl.textContent = cheerCount;
+            }
+        } catch (e) { }
+
+        if (bigCheerBtn) {
+            bigCheerBtn.addEventListener("click", (e) => {
+                cheerCount++;
+                if (cheerCountEl) cheerCountEl.textContent = cheerCount;
+                try {
+                    localStorage.setItem("pip_growth_cheers", cheerCount);
+                } catch (err) { }
+
+                playSoftChime(1.3);
+                const rect = bigCheerBtn.getBoundingClientRect();
+                createSparkleBurst(rect.left + rect.width / 2, rect.top + window.scrollY + rect.height / 2);
+            });
+        }
+
+        // 6. Interactive Filter Navigation Pills
+        const filterPills = document.querySelectorAll(".milestone-pill-btn");
+        const timelineItems = document.querySelectorAll(".timeline-item");
+
+        filterPills.forEach((pill) => {
+            pill.addEventListener("click", () => {
+                filterPills.forEach((p) => p.classList.remove("active"));
+                pill.classList.add("active");
+
+                const target = pill.getAttribute("data-target");
+
+                if (target === "all") {
+                    timelineItems.forEach((item) => {
+                        item.style.display = "block";
+                        item.querySelector(".milestone-card")?.classList.remove("active-focus");
+                    });
+                    playSoftChime(1.0);
+                } else {
+                    timelineItems.forEach((item) => {
+                        if (item.id === target) {
+                            item.style.display = "block";
+                            const card = item.querySelector(".milestone-card");
+                            if (card) {
+                                card.classList.add("active-focus");
+                                item.scrollIntoView({ behavior: "smooth", block: "center" });
+                            }
+                        } else {
+                            item.style.display = "none";
+                        }
+                    });
+                    playSoftChime(1.18);
+                }
+            });
+        });
+
+        // 7. Interactive Click & Focus on Milestone Cards
+        document.querySelectorAll(".milestone-card").forEach((card) => {
+            card.addEventListener("click", () => {
+                document.querySelectorAll(".milestone-card").forEach((c) => c.classList.remove("active-focus"));
+                card.classList.add("active-focus");
+            });
+        });
+
+        // 8. Generate dynamic twinkling stars in background
+        (function createTwinkleDecorations() {
+            const container = document.getElementById("bgDecorations");
+            if (!container) return;
+
+            const starIcons = ["✦", "✧", "⋆", "✨", "🌸"];
+            const count = window.innerWidth < 600 ? 18 : 36;
+
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement("span");
+                star.className = "star-twinkle";
+                star.textContent = starIcons[Math.floor(Math.random() * starIcons.length)];
+                star.style.left = Math.random() * 96 + "%";
+                star.style.top = Math.random() * 95 + "%";
+                star.style.setProperty("--d", (Math.random() * 3 + 2.5) + "s");
+                star.style.animationDelay = (Math.random() * 3) + "s";
+                star.style.fontSize = (Math.random() * 0.8 + 0.75) + "rem";
+                container.appendChild(star);
+            }
+        })();
+    </script>
+</body>
+
+</html>
